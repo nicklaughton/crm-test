@@ -7,6 +7,23 @@ let config = {
 };
 
 
+config.name = 'memory';
+config.connector = 'memory';
+
+@lifeCycleObserver('datasource')
+export class MemoryDataSource extends juggler.DataSource implements LifeCycleObserver {
+	static dataSourceName = config.name;
+	static readonly defaultConfig = config;
+
+	constructor(
+		@inject('datasources.config.memory', { optional: true })
+		dsConfig: object = config
+	) {
+		super(dsConfig);
+	}
+}
+
+
 config.name = 'nick-crm-2024-2';
 config.connector = 'memory';
 

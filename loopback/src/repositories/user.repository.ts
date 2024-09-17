@@ -29,7 +29,7 @@ import {
     BindingScope,
     bind,
 } from '@loopback/core';
-import { NickCrm20242DataSource } from '../datasources';
+import { MemoryDataSource } from '../datasources';
 
 const Debug = require('debug')('Loopback4BaseLibrary:User');
 Debug.log = console.log.bind(console);
@@ -42,8 +42,7 @@ export class UserRepository extends BaseCrudRepository<
     UserRelations
 > {
     constructor(
-        @inject('datasources.nick-crm-2024-2')
-        dataSource: NickCrm20242DataSource,
+        @inject('datasources.memory') dataSource: MemoryDataSource,
         @inject(CoreBindings.APPLICATION_INSTANCE) public app: ADApplication
     ) {
         super(app, UserModel, dataSource);

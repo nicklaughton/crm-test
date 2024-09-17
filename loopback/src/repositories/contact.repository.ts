@@ -40,7 +40,7 @@ import {
 import { ImageRepository } from './image.repository';
 
 import { CompanyRepository } from './company.repository';
-import { NickCrm20242DataSource } from '../datasources';
+import { MemoryDataSource } from '../datasources';
 
 import { ExportImportRepositoryMixin } from '../mixins/export-import-repository.mixin';
 
@@ -74,8 +74,7 @@ export class ContactRepository extends ExportImportRepositoryMixin<
     >;
 
     constructor(
-        @inject('datasources.nick-crm-2024-2')
-        dataSource: NickCrm20242DataSource,
+        @inject('datasources.memory') dataSource: MemoryDataSource,
 
         @repository.getter('ImageRepository')
         protected imageRepositoryGetter: Getter<ImageRepository>,

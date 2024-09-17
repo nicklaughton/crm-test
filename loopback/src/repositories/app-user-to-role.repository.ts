@@ -42,7 +42,7 @@ import {
 import { RoleRepository } from './role.repository';
 
 import { AppUserRepository } from './app-user.repository';
-import { NickCrm20242DataSource } from '../datasources';
+import { MemoryDataSource } from '../datasources';
 
 import { ExportImportRepositoryMixin } from '../mixins/export-import-repository.mixin';
 
@@ -76,8 +76,7 @@ export class AppUserToRoleRepository extends ExportImportRepositoryMixin<
     >;
 
     constructor(
-        @inject('datasources.nick-crm-2024-2')
-        dataSource: NickCrm20242DataSource,
+        @inject('datasources.memory') dataSource: MemoryDataSource,
 
         @repository.getter('RoleRepository')
         protected roleRepositoryGetter: Getter<RoleRepository>,

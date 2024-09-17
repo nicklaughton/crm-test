@@ -20,7 +20,7 @@ import { ExportImportModelMixin } from '../mixins/export-import-model.mixin';
         displayName: 'Staff',
         resourceName: 'Staff',
 
-        postgresql: { table: 'staff' },
+        memory: { table: 'staff' },
 
         indexes: {},
         partialIndexes: {},

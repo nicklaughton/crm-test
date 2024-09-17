@@ -18,7 +18,7 @@ import { AppUserModel, AppUserWithRelations } from './app-user.model';
         displayName: 'Auth0 User',
         resourceName: 'Auth0Users',
 
-        postgresql: { table: 'auth0user' },
+        memory: { table: 'auth0user' },
 
         indexes: {},
         partialIndexes: {},

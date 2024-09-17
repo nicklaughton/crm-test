@@ -21,7 +21,7 @@ import { ExportImportModelMixin } from '../mixins/export-import-model.mixin';
         displayName: 'App User To Role',
         resourceName: 'AppUserToRoles',
 
-        postgresql: { table: 'appusertorole' },
+        memory: { table: 'appusertorole' },
 
         indexes: {
             AppUserToRole_unique: {

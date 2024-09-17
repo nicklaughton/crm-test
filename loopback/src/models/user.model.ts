@@ -17,7 +17,7 @@ import { BaseEntity } from './base-entity';
         displayName: 'User',
         resourceName: 'Users',
 
-        postgresql: { table: 'user' },
+        memory: { table: 'user' },
 
         indexes: {},
         partialIndexes: {},

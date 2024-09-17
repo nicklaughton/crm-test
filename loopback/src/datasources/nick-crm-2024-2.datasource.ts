@@ -11,7 +11,6 @@ const config = {
     database: process.env.PGDATABASE,
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
-    isPrimary: true,
 };
 
 if (process.env.databaseUrl && !process.env.PGPORT && !process.env.PGDATABASE) {

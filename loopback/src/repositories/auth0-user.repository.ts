@@ -33,7 +33,7 @@ import {
 } from '@loopback/core';
 
 import { AppUserRepository } from './app-user.repository';
-import { NickCrm20242DataSource } from '../datasources';
+import { MemoryDataSource } from '../datasources';
 
 const Debug = require('debug')('Auth0Loopback4:Auth0User');
 Debug.log = console.log.bind(console);
@@ -51,8 +51,7 @@ export class Auth0UserRepository extends BaseCrudRepository<
     >;
 
     constructor(
-        @inject('datasources.nick-crm-2024-2')
-        dataSource: NickCrm20242DataSource,
+        @inject('datasources.memory') dataSource: MemoryDataSource,
 
         @repository.getter('AppUserRepository')
         protected appUserRepositoryGetter: Getter<AppUserRepository>,

@@ -23,7 +23,7 @@ import { ExportImportModelMixin } from '../mixins/export-import-model.mixin';
         displayName: 'Role',
         resourceName: 'Roles',
 
-        postgresql: { table: 'role' },
+        memory: { table: 'role' },
 
         indexes: {
             Role_name: {

@@ -26,7 +26,7 @@ import { ExportImportModelMixin } from '../mixins/export-import-model.mixin';
         displayName: 'App User',
         resourceName: 'AppUsers',
 
-        postgresql: { table: 'appuser' },
+        memory: { table: 'appuser' },
 
         indexes: {},
         partialIndexes: {},

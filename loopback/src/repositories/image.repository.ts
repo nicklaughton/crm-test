@@ -31,7 +31,7 @@ import {
 } from '@loopback/core';
 
 import { ContactRepository } from './contact.repository';
-import { NickCrm20242DataSource } from '../datasources';
+import { MemoryDataSource } from '../datasources';
 
 import { ExportImportRepositoryMixin } from '../mixins/export-import-repository.mixin';
 
@@ -59,8 +59,7 @@ export class ImageRepository extends ExportImportRepositoryMixin<
     >;
 
     constructor(
-        @inject('datasources.nick-crm-2024-2')
-        dataSource: NickCrm20242DataSource,
+        @inject('datasources.memory') dataSource: MemoryDataSource,
 
         @repository.getter('ContactRepository')
         protected contactRepositoryGetter: Getter<ContactRepository>,

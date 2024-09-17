@@ -17,7 +17,7 @@ import { Country } from './';
         displayName: 'Supplier',
         resourceName: 'Suppliers',
 
-        postgresql: { table: 'supplier' },
+        memory: { table: 'supplier' },
 
         indexes: {},
         partialIndexes: {},
