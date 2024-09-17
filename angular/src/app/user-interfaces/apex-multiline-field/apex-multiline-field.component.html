@@ -1,0 +1,5 @@
+<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [floatLabel]="apexDynamicComponentsService.formFieldFloatLabel" [ngClass]="{'no-bottom-padding':noPadding}" class="apex-field" [attr.data-apex-test]="label || control?.displayName">
+	<mat-label>{{label || control?.displayName}}</mat-label>
+	<textarea matInput [formControl]="control" [required]="control?.validator && control?.validator({})?.required" [cdkTextareaAutosize]="true" (blur)="onBlur()"></textarea>
+	<mat-error *ngIf="control.errors">{{errorMessage()}}</mat-error>
+</mat-form-field>

@@ -1,0 +1,6 @@
+<apex-breadcrumb>
+	<apex-export-many-button [array]="staff"></apex-export-many-button>
+</apex-breadcrumb>
+<p>This is an example of a customized list page. The array of contacts is read including the company that each contact belongs to. The table has custom columns to display the company. </p>
+<apex-table-v3 [array]="contacts" pathsCsv="name,company.name,email,phoneNumber,jobTitle" columnLabelsCsv="Name,Company,Email,Phone,Job Title"></apex-table-v3>
+<apex-add-button [array]="contacts" includeRelationshipsCsv="company"></apex-add-button>

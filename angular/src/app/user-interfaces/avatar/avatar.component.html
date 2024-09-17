@@ -1,0 +1,7 @@
+<mat-menu #menu="matMenu">
+	<button (click)="menuNameClicked.emit(menuName)" mat-menu-item *ngFor="let menuName of menuNames; let i = index;" [attr.data-apex-test]="menuName">{{menuName}}</button>
+	<button (click)="authService.logout()" mat-menu-item data-apex-test="Logout">Logout</button>
+</mat-menu>
+<button *ngIf="appUser" [matTooltip]="appUser.email" mat-icon-button [matMenuTriggerFor]="menu" [attr.data-apex-test]="appUser.email">
+	<img [src]="appUser.picture || 'assets/blank-profile-picture.png'">
+</button>

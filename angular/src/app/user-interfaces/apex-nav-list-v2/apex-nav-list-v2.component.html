@@ -1,0 +1,16 @@
+<h1 *ngIf="label && headingLevel == 1">{{label}}</h1>
+<h2 *ngIf="label && headingLevel == 2">{{label}}</h2>
+<h3 *ngIf="label && headingLevel == 3">{{label}}</h3>
+<mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
+	<mat-list-item *ngFor="let item of array; let i = index;" cdkDrag [cdkDragData]="item" [cdkDragDisabled]="!sortable" cdkDragLockAxis="y" [disableRipple]="true">
+		<apex-row [gap]="0">
+			<a [routerLink]="getRouterLink(item)" [queryParams]="getQueryParams(item)">
+				<apex-display-name [object]="item"></apex-display-name>
+			</a>
+			<button *ngIf="allowDelete" mat-icon-button matTooltip="Delete" confirmMessage="Are you sure you want to delete this {{array?.getMetadata('displayName')}}?" (confirm)="array.remove(i)" apexWidth="40px" data-apex-test="Delete">
+				<mat-icon>{{deleteIconName ? deleteIconName : 'delete_outline'}}</mat-icon>
+			</button>
+		</apex-row>
+	</mat-list-item>
+</mat-nav-list>
+<p *ngIf="noItemsMessage && array.length == 0">{{noItemsMessage}}</p>

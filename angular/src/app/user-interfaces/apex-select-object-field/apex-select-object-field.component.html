@@ -1,0 +1,6 @@
+<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [floatLabel]="apexDynamicComponentsService.formFieldFloatLabel" [ngClass]="{'no-bottom-padding':noPadding}" *ngIf="options" class="apex-field" [attr.data-apex-test]="label || options.getMetadata('displayName')">
+	<mat-label>{{label || options.getMetadata('displayName')}}</mat-label>
+	<mat-select [formControl]="formControl" [required]="formControl?.validator && formControl?.validator({})?.required" (selectionChange)="handleSelect($event)">
+		<mat-option *ngFor="let option of options; let i = index;" [value]="option">{{displayNameFunction(option)}}</mat-option>
+	</mat-select>
+</mat-form-field>

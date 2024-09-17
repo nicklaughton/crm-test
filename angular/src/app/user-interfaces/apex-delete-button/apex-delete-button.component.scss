@@ -1,0 +1,11 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+:host {
+    display: block;
+}
+
+mat-spinner {
+    position: absolute;
+    top: calc(50% - 10px);
+    left: calc(50% - 10px);
+}

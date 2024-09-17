@@ -1,0 +1,21 @@
+<apex-row verticalAlignment="center" [gap]="0">
+	<p *ngIf="message">{{message}}</p>
+	<h1 *ngIf="!message && levels">
+		<a routerLink="/{{camelCase(levels[0].getMetadata('pluralName'))}}" matTooltip="Open {{levels[0].getMetadata('pluralDisplayName')}}" [attr.data-apex-test]="levels[0].getMetadata('pluralDisplayName')" *ngIf="!skipTopLevel">{{levels[0].getMetadata('pluralDisplayName')}}</a>
+		<ng-container *ngFor="let level of levels; let i = index;">
+			<mat-icon *ngIf="!skipTopLevel || i > 0">keyboard_arrow_right</mat-icon>
+			<a routerLink="/{{camelCase(level.getMetadata('pluralName'))}}/{{level.id}}" *ngIf="i < levels.length-1" matTooltip="Open {{level.getMetadata('displayName')}}" [attr.data-apex-test]="level.getMetadata('displayName')">
+				<apex-display-name [object]="level"></apex-display-name>
+				<span *ngIf="includeType" class="secondary">{{level.getMetadata('displayName')}}</span>
+			</a>
+			<ng-container *ngIf="i == levels.length-1 && !extraLevelLabel">
+				<apex-display-name [object]="level"></apex-display-name>
+				<span *ngIf="includeType" class="secondary">{{level.getMetadata('displayName')}}</span>
+			</ng-container>
+			<span *ngIf="i == levels.length-1 && extraLevelLabel">{{extraLevelLabel}}</span>
+			<span *ngIf="i == levels.length-1 && extraLevelType" class="secondary">{{extraLevelType}}</span>
+		</ng-container>
+	</h1>
+	<ng-content></ng-content>
+	<apex-ng-content for-selector="apex-path-breadcrumb"></apex-ng-content>
+</apex-row>

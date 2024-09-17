@@ -1,0 +1,4 @@
+<button (confirm)="delete()" confirmMessage="Are you sure you want to delete this {{objectDisplayName || object?.getMetadata('displayName')}}?" mat-icon-button matTooltip="Delete {{objectDisplayName || object?.getMetadata('displayName')}}" [disabled]="disabled || deleting" data-apex-test="Delete">
+	<mat-icon>delete_outline</mat-icon>
+	<mat-spinner diameter="20" mode="indeterminate" *ngIf="deleting"></mat-spinner>
+</button>

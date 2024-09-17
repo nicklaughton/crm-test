@@ -1,0 +1,6 @@
+{
+	"extends": "./tsconfig.app.json",
+	"include": ["src/**/*.d.ts", "src/prod.ts"],
+	"types": ["node"],
+	"files": ["src/prod.ts", "src/polyfills.ts"]
+}

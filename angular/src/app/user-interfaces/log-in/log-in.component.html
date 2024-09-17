@@ -1,0 +1,11 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="page-container">
+	<div fxLayout="column" class="login-container">
+		<h1>Login</h1>
+		<p>Welcome back, please login to your account</p>
+		<div fxLayout="row" fxLayoutGap="20px">
+			<button (click)="authService.login()" color="primary" mat-raised-button *ngIf="(authService.authenticated | async) === false" fxFlex="grow">Log In</button>
+			<button (click)="authService.signup()" color="accent" mat-raised-button *ngIf="(authService.authenticated | async) === false && disableSignUps !== 'true'" fxFlex="grow">Sign Up</button>
+			<button (click)="authService.logout()" color="primary" mat-raised-button *ngIf="(authService.authenticated | async)" fxFlex="grow">Log Out</button>
+		</div>
+	</div>
+</div>

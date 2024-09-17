@@ -1,0 +1,11 @@
+<h2 mat-dialog-title *ngIf="!title">Add {{array.getMetadata('infiniteArticle')}} {{array.getMetadata('displayName')}}</h2>
+<h2 mat-dialog-title *ngIf="title">{{title}}</h2>
+<mat-dialog-content>
+	<apex-fields [object]="newItem" widths="100" [allFields]="allFields" [includeRelationshipsCsv]="includeRelationshipsCsv" [excludePropertiesCsv]="excludePropertiesCsv"></apex-fields>
+	<mat-progress-bar mode="indeterminate" *ngIf="adding" aria-label="Adding"></mat-progress-bar>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button [mat-dialog-close]="true" mat-button data-apex-test="Cancel">Cancel</button>
+	<button mat-button (click)="add()" [disabled]="disabled || adding" [mat-dialog-close]="true" data-apex-test="Add">Add</button>
+	<button mat-button (click)="add()" [disabled]="disabled || adding" *ngIf="addMultiple" data-apex-test="Add and Add Another">Add and Add Another</button>
+</mat-dialog-actions>

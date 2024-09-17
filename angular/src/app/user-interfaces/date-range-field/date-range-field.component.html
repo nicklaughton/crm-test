@@ -1,0 +1,15 @@
+<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [floatLabel]="apexDynamicComponentsService.formFieldFloatLabel" [ngClass]="{'no-bottom-padding': noPadding}" class="apex-field" [attr.data-apex-test]="label || control.displayName">
+	<mat-label>{{label || control.displayName}}</mat-label>
+	<mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
+		<input matStartDate="matStartDate" placeholder="Start date" [formControl]="startDateControl" [autocomplete]="apexDynamicComponentsService.inputAutocomplete">
+		<input matEndDate="matEndDate" placeholder="End date" [formControl]="endDateControl" [autocomplete]="apexDynamicComponentsService.inputAutocomplete">
+	</mat-date-range-input>
+	<mat-datepicker-toggle matSuffix="matSuffix" [for]="picker"></mat-datepicker-toggle>
+	<mat-date-range-picker #picker></mat-date-range-picker>
+	<mat-error *ngIf="startDateControl.errors?.matDatepickerMin">Must be on or after {{minDate.format('l')}}</mat-error>
+	<mat-error *ngIf="endDateControl.errors?.matDatepickerMin">Must be on or after {{minDate.format('l')}}</mat-error>
+	<mat-error *ngIf="startDateControl.errors?.matDatepickerMax">Must be on or before {{maxDate.format('l')}}</mat-error>
+	<mat-error *ngIf="endDateControl.errors?.matDatepickerMax">Must be on or before {{maxDate.format('l')}}</mat-error>
+	<mat-error *ngIf="startDateControl.errors?. matDatepickerParse">Please specify a valid date.</mat-error>
+	<mat-error *ngIf="endDateControl.errors?. matDatepickerParse">Please specify a valid date.</mat-error>
+</mat-form-field>

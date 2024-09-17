@@ -1,0 +1,29 @@
+<mat-toolbar color="primary" *ngIf="!(apexDynamicComponentsService?.hideToolbar | async)">
+	<apex-row gap="8">
+		<button (click)="sidenav.toggle()" mat-icon-button apexWidth="40px" aria-label="Toggle Menu" data-apex-test="Sidenav Toggle">
+			<mat-icon>menu</mat-icon>
+		</button>
+		<div apexWidth="nogrow">{{packageService.applicationTitle}}</div>
+		<div apexWidth="grow"></div>
+		<div apexWidth="nogrow">
+			<ng-template #container></ng-template>
+		</div>
+		<avatar></avatar>
+	</apex-row>
+</mat-toolbar>
+<router-outlet *ngIf="(apexDynamicComponentsService?.hideToolbar | async)"></router-outlet>
+<mat-sidenav-container *ngIf="!(apexDynamicComponentsService?.hideToolbar | async)">
+	<mat-sidenav #sidenav mode="over">
+		<mat-nav-list>
+			<a mat-list-item *ngFor="let rootPage of rootPages; let i = index;" [routerLink]="rootPage.path" (click)="sidenav.close()" [attr.data-apex-test]="rootPage.displayName">
+				<img *ngIf="rootPage.sidenavImageName" src="assets/{{rootPage.sidenavImageName}}" matListIcon>
+				<mat-icon matListIcon *ngIf="rootPage.sidenavIconName" [ngClass]="rootPage.sidenavIconClass">{{rootPage.sidenavIconName}}</mat-icon>
+				<span matLine>{{rootPage.displayName}}</span>
+			</a>
+		</mat-nav-list>
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<router-outlet></router-outlet>
+	</mat-sidenav-content>
+</mat-sidenav-container>
+<error-alert></error-alert>

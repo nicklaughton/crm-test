@@ -1,0 +1,33 @@
+<apex-breadcrumb></apex-breadcrumb>
+<p>This is a custom company page, showing contacts and projects as two different list types.</p>
+<apex-fields [object]="company" includeRelationshipsCsv="industry" widths="100 100 50 20"></apex-fields>
+<h2>Contacts</h2>
+<apex-wrap widths="100 100 50 33">
+	<mat-card *ngFor="let contact of company.contacts; let i = index;">
+		<mat-card-header>
+			<mat-card-title>{{contact.name}}</mat-card-title>
+			<mat-card-subtitle>{{contact.jobTitle}}</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<apex-row>
+				<img src="/api/Images/{{contact.image.id}}/download?hash={{contact.image.hash}}" *ngIf="contact.image.id">
+				<img src="/assets/blank-profile-picture.png" *ngIf="!contact.image.id">
+				<div>
+					<p>{{contact.phoneNumber}}</p>
+					<p>{{contact.email}}</p>
+				</div>
+			</apex-row>
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<a mat-icon-button [routerLink]="'/contacts/' + contact.id" matTooltip="Edit Contact">
+				<mat-icon>edit</mat-icon>
+			</a>
+			<apex-delete-button [object]="contact" afterDeleteRoute="/home"></apex-delete-button>
+		</mat-card-actions>
+	</mat-card>
+	<button (click)="addContactDialog.open()" mat-button>Add Contact</button>
+</apex-wrap>
+<apex-table-v3 [array]="company.projects" label="Projects" routePrefix="/home/projects/"></apex-table-v3>
+<button (click)="addProjectDialog.open()" mat-raised-button>Add Project</button>
+<apex-add-dialog-wrapper [array]="company.contacts" #addContactDialog></apex-add-dialog-wrapper>
+<apex-add-dialog-wrapper [array]="company.projects" #addProjectDialog includeRelationshipsCsv="projectManager"></apex-add-dialog-wrapper>

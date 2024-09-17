@@ -1,0 +1,24 @@
+<h1 *ngIf="label && headingLevel == 1">{{label}}</h1>
+<h2 *ngIf="label && headingLevel == 2">{{label}}</h2>
+<h3 *ngIf="label && headingLevel == 3">{{label}}</h3>
+<mat-accordion cdkDropList (cdkDropListDropped)="drop($event)" #accordion [multi]="multi">
+	<mat-expansion-panel *ngFor="let item of array; let i = index;" [expanded]="item.id == expandedId" cdkDrag [cdkDragData]="item" [cdkDragDisabled]="item.id == expandedId || !sortable || array.formArray.disabled" (click)="setExpandedElement($event)" (closed)="expandedId = undefined" (afterExpand)="handleExpand(item)" (afterOpened)="handledOpened(item)" cdkDragLockAxis="y">
+		<mat-expansion-panel-header>
+			<apex-row [gap]="0" class="full-width">
+				<apex-display-name [object]="item"></apex-display-name>
+				<a [routerLink]="preventDefaultLaunch ? null : routePrefix+item.id" *ngIf="includeLaunch && item.id" mat-icon-button matTooltip="Open {{item?.getMetadata('displayName')}}" apexWidth="40px" data-apex-test="Launch" (click)="launch(item)">
+					<mat-icon>launch</mat-icon>
+				</a>
+			</apex-row>
+		</mat-expansion-panel-header>
+		<ng-template matExpansionPanelContent>
+			<apex-fields [object]="item" widths="100" [includeRelationshipsCsv]="includeRelationshipsCsv"></apex-fields>
+		</ng-template>
+		<mat-action-row *ngIf="!preventDelete && !array.formArray.disabled">
+			<button mat-icon-button (confirm)="remove(i)" confirmMessage="Are you sure you want to delete this {{item?.getMetadata('displayName')}}?" data-apex-test="Delete">
+				<mat-icon>delete</mat-icon>
+			</button>
+		</mat-action-row>
+	</mat-expansion-panel>
+</mat-accordion>
+<apex-add-field [array]="array" [nameCase]="nameCase" [defaults]="defaults" (added)="handleAdded($event)" [ngClass]="{padding: array.length > 0}" *ngIf="!hideAdd && !array.formArray.disabled" [label]="addLabel"></apex-add-field>

@@ -1,0 +1,44 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+mat-form-field {
+    width: 100%;
+}
+
+.json {
+    font-family: monospace;
+    white-space: pre;
+    line-height: 150%;
+}
+
+.error {
+    background-color: #fdd;
+    padding: 5px;
+    padding-left: 10px;
+    overflow-x: auto;
+}
+
+.secondary {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 80%;
+    line-height: 24px;
+    margin-left: 5px;
+}
+
+.padding {
+    padding-right: 16px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+apex-display-name {
+    line-height: 40px;
+}
+
+a {
+    padding-right: 10px;
+}
+
+h1 {
+}

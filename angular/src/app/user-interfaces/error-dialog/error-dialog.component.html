@@ -1,0 +1,8 @@
+<mat-dialog-content>
+	<div class="scroller">
+		<div *ngFor="let message of messages; let i = index;">{{message}}</div>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button color="primary" (click)="clearAndClose()" data-apex-test="Close">Close</button>
+</mat-dialog-actions>

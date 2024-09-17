@@ -1,0 +1,49 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+.clickable {
+    cursor: pointer;
+}
+
+.move {
+    cursor: move;
+}
+
+.row {
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 4px;
+}
+
+.row:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+mat-icon.clickable {
+    vertical-align: text-bottom;
+    margin-right: 8px;
+}
+
+li {
+    margin-bottom: 12px;
+}
+
+iframe {
+    border: none;
+    width: 100%;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+h3.title {
+    margin-bottom: 0;
+}
+
+.row p {
+    margin-bottom: 0;
+}
+
+mat-dialog-content {
+    padding-bottom: 4px;
+}

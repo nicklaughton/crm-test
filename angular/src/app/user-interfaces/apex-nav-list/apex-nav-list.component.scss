@@ -1,0 +1,38 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+:host {
+    display: block;
+}
+
+a {
+    line-height: 40px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+}
+
+apex-row {
+    width: 100%;
+}
+
+mat-nav-list {
+    padding-top: 0;
+}
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    background-color: white;
+    padding: 0 16px;
+    font-size: 16px;
+    height: 48px;
+    line-height: 48px;
+}
+
+.cdk-drag-preview a {
+    text-decoration: none;
+    color: inherit;
+}

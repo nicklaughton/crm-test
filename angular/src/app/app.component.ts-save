@@ -1,0 +1,94 @@
+import { PackageService } from './shared/services/package.service';
+
+import {
+	Component,
+	Input,
+	Output,
+	OnInit,
+	OnDestroy,
+	EventEmitter,
+	ViewChild,
+	ViewContainerRef,
+	Inject,
+	forwardRef
+} from '@angular/core';
+
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { ActivatedRoute, Params, Router } from '@angular/router';
+
+import { AuthService } from './shared/services/auth.service';
+import { TranslateService } from './shared/services/translate.service';
+import { ApexDesignerEditService } from './shared/services/apex-designer-edit.service';
+import { ApexDesignerUserInterfacesService } from './shared/services/apex-designer-user-interfaces.service';
+import { map } from 'rxjs/operators';
+import * as Debug from 'debug';
+
+@Component({
+	selector: 'app-root',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.scss']
+})
+export class AppComponent implements OnInit, OnDestroy {
+	/**Properties******************************************/
+	_isInitComplete: boolean;
+
+	rootPages: any[];
+
+	/******************************************************/
+
+	constructor(
+		private httpClient: HttpClient,
+		private route: ActivatedRoute,
+		public router: Router,
+		public translate: TranslateService,
+		private apexDesignerEditService: ApexDesignerEditService,
+		private viewContainerRef: ViewContainerRef,
+		@Inject(forwardRef(() => ApexDesignerUserInterfacesService))
+		public apexDesignerUserInterfacesService: any,
+		public auth: AuthService,
+		public packageService: PackageService
+	) {}
+
+	@ViewChild('sidenav', { static: false } as any) sidenav;
+
+	/**Methods*********************************************/
+
+	ngOnInit() {
+		this.apexDesignerEditService.registerComponentInstance(this);
+
+		this.prepareRootPages();
+		this._isInitComplete = true;
+	}
+
+	prepareRootPages() {
+		let debug = Debug('App:prepareRootPages');
+
+		debug('this.apexDesignerUserInterfacesService', this.apexDesignerUserInterfacesService);
+
+		this.rootPages = this.apexDesignerUserInterfacesService
+			.list()
+			.map((item) => {
+				debug('item', item);
+				if (item.path.endsWith('/**')) {
+					let levels = item.path.split('/');
+					levels.pop();
+					item.path = levels.join('/');
+					debug('item.path', item.path);
+				}
+				return item;
+			})
+			.filter((item) => item.path && item.path.split('/').length == 2 && !item.excludeFromSidenav);
+
+		this.rootPages.sort((a, b) => {
+			if (a.sequence < b.sequence) return -1;
+			if (a.sequence > b.sequence) return 1;
+		});
+		debug('this.rootPages', this.rootPages);
+	}
+
+	ngOnDestroy() {
+		this.apexDesignerEditService.unregisterComponentInstance(this);
+	}
+	/******************************************************/
+}

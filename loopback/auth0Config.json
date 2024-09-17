@@ -1,0 +1,20 @@
+{
+    "domain": "apexdesigner.auth0.com",
+    "audience": "https://sample.apexdesigner.app",
+    "clientId": "hTEcUuIAyhriavioOXcd6xjVnE2vGJS9",
+    "logInRoute": "/logIn",
+    "loginErrorRoute": "/loginError",
+    "verifyEmailRoute": "/verifyEmail",
+    "loggedInRoute": "/",
+    "loggedOutRoute": "/loggedOut",
+    "httpInterceptor": {
+        "allowedList": [
+            {
+                "uri": "/api/*",
+                "allowAnonymous": true
+            }
+        ]
+    },
+    "useRefreshTokens": true,
+    "useCookiesForTransactions": true
+}

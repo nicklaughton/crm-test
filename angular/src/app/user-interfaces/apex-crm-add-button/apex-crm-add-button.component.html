@@ -1,0 +1,6 @@
+<button (click)="dialog.open()" mat-fab [matTooltip]="label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')" *ngIf="buttonType == 'FAB'" class="floating">
+	<mat-icon>add</mat-icon>
+</button>
+<button (click)="dialog.open()" mat-raised-button [matTooltip]="label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')" *ngIf="buttonType == 'raisedButton'" color="accent">Add</button>
+<button (click)="dialog.open()" [matTooltip]="label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')" *ngIf="buttonType == 'button'" color="accent" mat-button>Add</button>
+<apex-add-dialog-wrapper [array]="array" #dialog [defaults]="defaults" (added)="added.emit($event)" [allFields]="allFields" [includeRelationshipsCsv]="includeRelationshipsCsv" [inputRequiredFieldsCsv]="inputRequiredFieldsCsv" [addMultiple]="addMultiple"></apex-add-dialog-wrapper>

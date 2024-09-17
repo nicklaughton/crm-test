@@ -1,0 +1,395 @@
+import {
+	DefaultCrudRepository,
+	repository,
+	Options,
+	HasOneRepositoryFactory,
+	HasManyRepositoryFactory,
+	BelongsToAccessor,
+	Entity,
+	CrudRepository,
+	juggler
+} from '@loopback/repository';
+
+import {} from '../models';
+
+import { BaseCrudRepository } from '../repositories/base-crud.repository';
+import { inject, Getter, MixinTarget } from '@loopback/core';
+
+const fs = require('fs-extra');
+
+import { paramCase } from 'change-case';
+
+const Debug = require('debug')('Loopback4BaseLibrary:ExportImport');
+Debug.log = console.log.bind(console);
+Debug('mixin repository loaded');
+
+export function ExportImportRepositoryMixin<
+	M extends Entity,
+	R extends MixinTarget<BaseCrudRepository<M, any, REL>>,
+	REL extends object
+>(superClass: R, Model: any, mixinOptions: any): typeof superClass {
+	class MixedRepository extends superClass {
+		constructor(...args: any[]) {
+			super(...args);
+			const app = this.app;
+
+			this.app.on('started', async () => {
+				let debug = Debug.extend('importOnLaunch');
+				debug('mixinOptions.importOnStartPath %j', mixinOptions.importOnStartPath);
+				if (mixinOptions.importOnStartPath) {
+					const options = {};
+
+					let files = await fs.readdir(mixinOptions.importOnStartPath);
+					debug('files', files);
+
+					let modelName = Model.definition.name;
+					modelName = modelName.substr(0, modelName.length - 5);
+					debug('modelName %j', modelName);
+
+					files = files.filter((file: string) => file.endsWith(`.${paramCase(modelName)}.json`));
+					debug('files %j', files);
+
+					for (let file of files) {
+						let jsonString = await fs.readFile(mixinOptions.importOnStartPath + '/' + file, 'utf8');
+						debug('jsonString %j', jsonString);
+						if (jsonString.startsWith('{')) {
+							let exportData = JSON.parse(jsonString);
+							debug('exportData %j', exportData);
+							try {
+								console.log(`Importing file "${file}"`);
+								let item = await Model.import(exportData, options);
+								debug('item %j', item);
+							} catch (err) {
+								console.error(`Problem importing file "${file}": ${err}`);
+							}
+						} else {
+							console.log('Ignoring empty content file', file);
+						}
+					}
+				}
+			});
+		}
+		definePersistedModel(entityClass: any): typeof juggler.PersistedModel {
+			const modelClass = super['definePersistedModel']
+				? super['definePersistedModel'](entityClass)
+				: super.definePersistedModelWrapper(entityClass);
+			// operation hooks (ex: before save)
+
+			return modelClass;
+		}
+
+		async export(
+			model: any,
+
+			options?: Options
+		): Promise<any> {
+			let debug = Debug.extend('export');
+
+			debug('model %j', model);
+
+			let modelName = Model.definition.name;
+			modelName = modelName.substr(0, modelName.length - 5);
+			debug('modelName %j', modelName);
+
+			let exportData: any = {
+				type: modelName,
+				exportVersion: mixinOptions.exportVersion || 1,
+				[modelName]: await model.exportData(null, options)
+			};
+			debug('exportData %j', exportData);
+			return exportData;
+		}
+
+		referenceKey(
+			data: any,
+
+			options?: Options
+		): any {
+			let debug = Debug.extend('referenceKey');
+
+			debug('data %j', data);
+
+			let referenceKey = {};
+			debug('mixinOptions.keyProperties %j', mixinOptions.keyProperties);
+			for (let name of mixinOptions.keyProperties || {}) {
+				referenceKey[name] = data[name];
+			}
+			debug('referenceKey %j', referenceKey);
+
+			return referenceKey;
+		}
+
+		async exportData(
+			model: any,
+
+			parentIdName: string,
+
+			options?: Options
+		): Promise<any> {
+			let debug = Debug.extend('exportData');
+
+			debug('model %j', model);
+			debug('mixinOptions %j', mixinOptions);
+			debug('Model.definition %j', Model.definition);
+
+			let relationsByForeignKey = {};
+			for (let name in Model.definition.settings.keyRelations) {
+				let relation = Model.definition.settings.keyRelations[name];
+				debug('relation %j', relation);
+				if (relation.type == 'belongsTo') {
+					relationsByForeignKey[relation.foreignKey] = relation;
+				}
+			}
+			debug('relationsByForeignKey %j', relationsByForeignKey);
+
+			let data = {};
+			let idValue;
+
+			// Add the property values
+			for (let name in Model.definition.properties) {
+				debug('name %j', name);
+				if (!relationsByForeignKey[name]) {
+					let property = Model.definition.properties[name];
+					debug('property %j', property);
+
+					if (property.id) {
+						debug('idValue %j', idValue);
+						idValue = model[name];
+					} else {
+						data[name] = model[name];
+					}
+				}
+			}
+			debug('data with properties %j', data);
+
+			// Add the include relationships
+			for (let name of mixinOptions.includeRelationships || []) {
+				debug('name %j', name);
+
+				let relation = Model.definition.settings.keyRelations[name];
+				debug('relation %j', relation);
+
+				if (relation.type == 'hasMany') {
+					await model[name].read(options);
+					data[name] = [];
+					for (let child of model[name]) {
+						debug('child %j', child);
+						if (!child.exportData)
+							throw `${Model.definition.name} relation ${name} does not have the export mixin configured.`;
+						data[name].push(await child.exportData(relation.foreignKey, options));
+					}
+				} else if (relation.type == 'hasOne') {
+					let where = {
+						[relation.foreignKey]: model.id
+					};
+					debug('where %j', where);
+
+					let classReference = model[name]._classReference;
+
+					let child = await classReference.findOne({ where: where }, options);
+					debug('child %j', child);
+					if (child.id) {
+						let childExport = await child.exportData(relation.foreignKey, options);
+						debug('childExport %j', childExport);
+
+						data[name] = childExport;
+					}
+				} else {
+					throw `Relation "${name}" of type "${relation.type}" on "${Model.definition.name}" is not supported`;
+				}
+			}
+			debug('data with includes %j', data);
+
+			debug('========================================================');
+
+			debug('mixinOptions.referenceRelationships %j', mixinOptions.referenceRelationships);
+			for (let name of mixinOptions.referenceRelationships || []) {
+				debug('name %j', name);
+
+				let relation = Model.definition.settings.keyRelations[name];
+				debug('relation %j', relation);
+
+				debug('relation.foreignKey %j', relation.foreignKey);
+				debug('parentIdName %j', parentIdName);
+				if (relation.foreignKey != parentIdName) {
+					let parentModelName = relation.modelTo.slice(0, -5);
+					debug('parentModelName %j', parentModelName);
+
+					let ParentModel = this.app['objects'][parentModelName];
+
+					let parentModelId = model[relation.foreignKey];
+					debug('parentModelId %j', parentModelId);
+
+					if (parentModelId) {
+						let parentModel = await ParentModel.findById(parentModelId, {}, options);
+						debug('parentModel %j', parentModel);
+
+						let referenceKey = await ParentModel.referenceKey(parentModel);
+						debug('referenceKey %j', referenceKey);
+
+						data[name] = referenceKey;
+					}
+
+					delete data[relation.foreignKey];
+				}
+			}
+			debug('data with references %j', data);
+
+			return data;
+		}
+
+		async import(
+			exportData: any,
+
+			options?: Options
+		): Promise<void> {
+			let debug = Debug.extend('import');
+
+			debug('exportData %j', exportData);
+
+			let modelName = Model.definition.name;
+			modelName = modelName.substr(0, modelName.length - 5);
+			debug('modelName %j', modelName);
+
+			if (exportData.type !== modelName)
+				throw {
+					statusCode: 422,
+					message: `"${exportData.type}" is not a valid type for import as a "${modelName}"`
+				};
+
+			let model = await Model.importData(exportData[modelName], options);
+			debug('model %j', model);
+
+			return model;
+		}
+
+		async importData(
+			dataFromExport: any,
+
+			options?: Options
+		): Promise<any> {
+			let debug = Debug.extend('importData');
+
+			debug('dataFromExport %j', dataFromExport);
+
+			// Get the model name
+			let modelName = Model.definition.name;
+			modelName = modelName.substr(0, modelName.length - 5);
+			debug('modelName %j', modelName);
+
+			// Add the property values
+			let data = {};
+			for (let name in Model.definition.properties) {
+				debug('name %j', name);
+				let value = dataFromExport[name];
+				if (value !== undefined) {
+					data[name] = dataFromExport[name];
+				}
+			}
+			debug('data with properties %j', data);
+
+			// Add the foreign key values
+			for (let name of mixinOptions.referenceRelationships || []) {
+				debug('name %j', name);
+
+				let relation = Model.definition.settings.keyRelations[name];
+				debug('relation %j', relation);
+
+				// The parent reference should already be filled in
+				if (!data[relation.foreignKey]) {
+					let key = dataFromExport[name];
+					debug('key %j', key);
+
+					if (key) {
+						let parent = this.app['models'][relation.model].findOne({ where: key }, options);
+						debug('parent %j', parent);
+
+						if (parent.id) {
+							data[relation.foreignKey] = parent.id;
+						}
+					}
+				}
+			}
+			debug('data with references %j', data);
+
+			// Find the model if it exists
+			let where = Model.referenceKey(data);
+			debug('where %j', where);
+
+			let model = await Model.findOne({ where: where }, options);
+			debug('model %j', model);
+
+			// Update or create the model
+			if (model?.id) {
+				for (let name in data) {
+					model[name] = data[name];
+				}
+				await model.save();
+				debug('saved');
+			} else {
+				model = await Model.create(data, options);
+				debug('created');
+			}
+
+			// Process the includes
+			for (let name of mixinOptions.includeRelationships || []) {
+				debug('name %j', name);
+
+				let relation = Model.definition.settings.keyRelations[name];
+				debug('relation %j', relation);
+
+				let ChildModel = model[name]._classReference;
+
+				let filter = { where: { [relation.foreignKey]: model.id } };
+				debug('filter %j', filter);
+
+				if (relation.type == 'hasMany') {
+					let toBeItemsByKey = {};
+					for (let toBeItem of dataFromExport[name] || []) {
+						toBeItem[relation.foreignKey] = model.id;
+						let key = JSON.stringify(ChildModel.referenceKey(toBeItem));
+						debug('key %j', key);
+						toBeItemsByKey[key] = await ChildModel.importData(toBeItem, options);
+					}
+					debug('toBeItemsByKey %j', toBeItemsByKey);
+
+					let existingItems = await ChildModel.find(filter, options);
+					debug('existingItems %j', existingItems);
+
+					for (let existingItem of existingItems) {
+						let key = JSON.stringify(ChildModel.referenceKey(existingItem));
+						debug('key %j', key);
+						if (!toBeItemsByKey[key]) {
+							debug('deleting existing item');
+							await existingItem.delete();
+							debug('deleted');
+						} else {
+							debug('keeping existing item');
+							model[name].push(existingItem);
+						}
+					}
+				} else {
+					if (dataFromExport[name]) {
+						model[name] = await ChildModel.importData(dataFromExport[name], options);
+					} else {
+						let where = {
+							[relation.foreignKey]: model.id
+						};
+						debug('where %j', where);
+
+						let child = await ChildModel.findOne({ where: where }, options);
+
+						if (child.id) {
+							debug('deleting child', child);
+							await child.delete();
+							debug('deleted');
+						}
+					}
+				}
+			}
+
+			return model;
+		}
+	}
+	return MixedRepository;
+}

@@ -1,0 +1,170 @@
+import { config, inject } from '@loopback/context';
+import { Response, Request, RestBindings, ExpressRequestHandler } from '@loopback/rest';
+import { AuthenticationStrategy, AuthenticationBindings, AuthenticationMetadata } from '@loopback/authentication';
+import { UserProfile } from '@loopback/security';
+import { JWT_SERVICE, KEY, Auth0Config, AUTH0_SERVICE } from './types';
+import { AppUserRepository } from '../repositories';
+import { repository } from '@loopback/repository';
+import { Application, CoreBindings, service } from '@loopback/core';
+import { Auth0Service } from './auth0.service';
+const jwtAuthz = require('express-jwt-authz');
+
+const classDebug = require('debug')('Auth0Loopback4:Auth0AuthenticationStrategy');
+classDebug.log = console.log.bind(console);
+
+export class Auth0AuthenticationStrategy implements AuthenticationStrategy {
+	name = 'apex-auth';
+	constructor(
+		@inject(RestBindings.Http.RESPONSE)
+		private response: Response,
+		@inject(AuthenticationBindings.METADATA)
+		private metadata: AuthenticationMetadata,
+		@inject(AUTH0_SERVICE) private auth0Service: Auth0Service,
+		@inject(JWT_SERVICE)
+		private jwtCheck: ExpressRequestHandler,
+		@config({ fromBinding: KEY })
+		private options: Auth0Config,
+		@repository(AppUserRepository)
+		public appUserRepository: AppUserRepository
+	) {}
+
+	async authenticate(request: Request): Promise<UserProfile | undefined> {
+		const debug = classDebug.extend('authenticate');
+		return new Promise<UserProfile | undefined>((resolve, reject) => {
+			this.jwtCheck(request, this.response, async (err: unknown) => {
+				if (err) {
+					debug('jwtCheck error:', err);
+					await this.handleRequestUser(request, resolve, reject);
+					return;
+				}
+
+				// If the `@authenticate` requires `scopes` check
+				if (this.metadata.options && this.metadata.options.scopes) {
+					jwtAuthz(this.metadata.options!.scopes, { failWithError: true })(
+						request,
+						this.response,
+						async (err2?: Error) => {
+							if (err2) {
+								console.error(err2);
+								reject(err2);
+								return;
+							}
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							//resolve((request as any).user);
+							await this.handleRequestUser(request, resolve, reject);
+						}
+					);
+				} else {
+					debug('request.user', (request as any).user);
+					//resolve(user);
+					await this.handleRequestUser(request, resolve, reject);
+				}
+			});
+		});
+	}
+
+	async handleRequestUser(request, resolve, reject) {
+		const debug = classDebug.extend('handleRequestUser');
+		const user = (request as any).user;
+		debug('user %j', user);
+
+		if (!user) {
+			return resolve({});
+		}
+
+		const auth0Config = this.options || {
+			audience: undefined,
+			issuer: undefined,
+			algorithms: undefined,
+			jwksUri: undefined
+		};
+
+		const username = user.sub;
+		const email = user[auth0Config.audience + '/email'];
+		const name = user[auth0Config.audience + '/name'];
+		const picture = user[auth0Config.audience + '/picture'];
+
+		// If we already know which userid this is
+		if (this.auth0Service.emailToAppUser[email]) {
+			this.auth0Service.addAppUserToRequest(request, email);
+			return resolve(user);
+		}
+
+		// If there are requests pending, queue this one up too
+		debug('HAS PENDING REQUESTS?', username, this.auth0Service.pendingRequestsByEmail[email]);
+		if (this.auth0Service.pendingRequestsByEmail[email]) {
+			this.auth0Service.pendingRequestsByEmail[email].push({ request, resolve });
+			// Do nothing more for now
+			return;
+		}
+
+		this.auth0Service.pendingRequestsByEmail[email] = [];
+		this.auth0Service.pendingRequestsByEmail[email].push({ request, resolve });
+
+		let appUser = await this.appUserRepository.findOne({
+			where: { or: [{ username: username }, { email: email }] },
+			include: [
+				{
+					relation: 'appUserToRoles',
+					scope: {
+						include: [
+							{
+								relation: 'role',
+								scope: {}
+							}
+						]
+					}
+				}
+			]
+		});
+
+		debug('appUser', appUser);
+
+		if (appUser) {
+			this.auth0Service.emailToAppUser[email] = appUser;
+
+			this.auth0Service.handlePendingRequests(email);
+
+			if (
+				appUser.username != username ||
+				appUser.picture != picture ||
+				appUser.name != name ||
+				appUser.email != email
+			) {
+				await this.appUserRepository.updateById(appUser.id, {
+					username: username,
+					name: name,
+					email: email,
+					picture: picture
+				});
+				appUser.username = username;
+				appUser.picture = picture;
+				appUser.name = name;
+				appUser.email = email;
+			}
+		} else {
+			let data = {
+				username: username,
+				name: name,
+				email: email,
+				picture: picture
+			};
+			debug('data', data);
+
+			try {
+				appUser = await this.appUserRepository.create(data);
+			} catch (err) {
+				debug('err', err);
+				return reject(err);
+			}
+
+			debug('appUser', appUser);
+
+			this.auth0Service.emailToAppUser[email] = appUser;
+
+			this.auth0Service.handlePendingRequests(email);
+		}
+
+		request.appUser = appUser;
+	}
+}

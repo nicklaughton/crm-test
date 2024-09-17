@@ -1,0 +1,9 @@
+<p *ngIf="label">{{label}}
+	<span *ngIf="control?.validator && control?.validator({})?.required"> *</span>
+</p>
+<mat-radio-group [value]="control.value" (change)="handleChange($event.value)">
+	<mat-radio-button *ngFor="let option of options; let i = index;" [value]="valueFunction(option)">
+		<span *ngIf="displayNameFunction">{{displayNameFunction(option)}}</span>
+		<apex-display-name [object]="option" *ngIf="!displayNameFunction"></apex-display-name>
+	</mat-radio-button>
+</mat-radio-group>

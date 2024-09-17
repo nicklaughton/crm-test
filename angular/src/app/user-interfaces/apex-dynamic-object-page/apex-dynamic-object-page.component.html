@@ -1,0 +1,3 @@
+<h1 *ngIf="notFound">Page Not Found</h1>
+<apex-objects-page-content [businessObjectName]="businessObjectName" *ngIf="businessObjectName && !id"></apex-objects-page-content>
+<apex-object-page-content [id]="id" [businessObjectName]="businessObjectName" *ngIf="businessObjectName && id"></apex-object-page-content>

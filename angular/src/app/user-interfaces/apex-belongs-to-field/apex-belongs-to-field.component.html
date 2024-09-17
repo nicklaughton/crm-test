@@ -1,0 +1,9 @@
+<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [floatLabel]="apexDynamicComponentsService.formFieldFloatLabel" [ngClass]="{'no-bottom-padding':noPadding}" class="apex-field" [attr.data-apex-test]="label || businessObject?.displayName">
+	<mat-label>{{label || businessObject?.displayName}}</mat-label>
+	<input matInput [formControl]="formControl" #input [matAutocomplete]="auto" (click)="open()" [required]="control?.validator && control?.validator({})?.required">
+	<mat-icon matSuffix (click)="open()" class="cursor-pointer" *ngIf="!disabled">arrow_drop_down</mat-icon>
+	<mat-autocomplete #auto="matAutocomplete" [autoActiveFirstOption]="true" [displayWith]="displayNameFunction" (optionSelected)="handleSelect()">
+		<mat-option *ngFor="let option of options; let i = index;" [value]="option">{{displayNameFunction(option)}}</mat-option>
+	</mat-autocomplete>
+	<mat-error *ngIf="formControl.errors">{{errorMessage()}}</mat-error>
+</mat-form-field>

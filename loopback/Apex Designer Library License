@@ -1,0 +1,23 @@
+LICENSE AGREEMENT
+This License Agreement ("Agreement") is made between the user of this library ("User") and Apex Process Consultants, a Michigan LLC  ("Apex").
+Apex has developed and owns Apex Designer,  which includes libraries ("Included Libraries") containing source code that is generated and provided to User as a part of Apex Designer's output;
+License Grant. Apex hereby grants to User a non-exclusive, non-transferable license to use the Included Libraries solely for the development, testing, and deployment of Users own software projects built with Apex Designer.
+
+Restrictions. Licensee may modify and distribute the Included Libraries, provided that Licensee includes the following notice in all copies and substantial portions of the Included Libraries:
+
+> Copyright 2023 Apex Process Consultants
+> This code was provided by Apex Designer (www.apexdesigner.io) and is subject to the terms of the License Agreement.
+
+Ownership. Apex retains all right, title, and interest in and to Apex Designer and the Included Libraries, and all intellectual property rights. This Agreement does not transfer any ownership or intellectual property rights to User.
+
+Warranty Disclaimer. Apex Designer and the Included Libraries are provided "AS IS," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement.
+Limitation of Liability. Apex shall not be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in connection with the use or inability to use Apex Designer or the Included Libraries, even if Apex has been advised of the possibility of such damages.
+
+Term and Termination. This Agreement shall remain in effect until terminated by either party. Licensor may terminate this Agreement immediately upon written notice to Licensee if Licensee breaches any provision of this Agreement or if Licensee's subscription to the Application expires or is terminated for any reason. Upon termination, Licensee must immediately cease using the Included Source Code and destroy all copies of the Included Source Code in Licensee's possession.
+
+Governing Law. This Agreement shall be governed by and construed in accordance with the laws of the State of Michigan, without giving effect to any choice of law or conflict of law provision or rule.
+
+Entire Agreement. This Agreement constitutes the entire agreement between the parties with respect to the subject matter hereof and supersedes all prior or contemporaneous oral or written communications, proposals, representations, and warranties.
+
+Assignment. Licensee may not assign this Agreement or any of its rights or obligations hereunder without the prior written consent of Licensor.
+

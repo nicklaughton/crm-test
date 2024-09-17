@@ -1,0 +1,5 @@
+<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [floatLabel]="floatLabel || apexDynamicComponentsService.formFieldFloatLabel" [ngClass]="{'no-bottom-padding':noPadding}" class="apex-field" [attr.data-apex-test]="label ||control?.displayName">
+	<mat-label>{{label ||control?.displayName}}</mat-label>
+	<input matInput [formControl]="currencyControl" [required]="control?.validator && control?.validator({})?.required" [autocomplete]="apexDynamicComponentsService.inputAutocomplete" (blur)="onBlur($event)" currencyMask [options]="options">
+	<mat-error *ngIf="control.errors">{{errorMessage()}}</mat-error>
+</mat-form-field>

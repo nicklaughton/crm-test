@@ -1,0 +1,4 @@
+<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [attr.data-apex-test]="placeholder ? placeholder : 'Search'" [ngClass]="{'no-bottom-padding': noPadding}">
+	<mat-icon matPrefix>search</mat-icon>
+	<input matInput [formControl]="control" [autocomplete]="apexDynamicComponentsService.inputAutocomplete" [placeholder]="placeholder" [attr.aria-label]="placeholder || 'Search'">
+</mat-form-field>

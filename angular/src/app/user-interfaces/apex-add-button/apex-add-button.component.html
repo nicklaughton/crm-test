@@ -1,0 +1,7 @@
+<button (click)="dialog.open()" [matTooltip]="label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')" *ngIf="iconButton" mat-icon-button [attr.data-apex-test]="label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')">
+	<mat-icon>add</mat-icon>
+</button>
+<button (click)="dialog.open()" mat-fab [matTooltip]="label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')" [color]="color" *ngIf="! iconButton" [attr.data-apex-test]="label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')">
+	<mat-icon>add</mat-icon>
+</button>
+<apex-add-dialog-wrapper [array]="array" #dialog [defaults]="defaults" (added)="added.emit($event)" [allFields]="allFields" [includeRelationshipsCsv]="includeRelationshipsCsv" [inputRequiredFieldsCsv]="inputRequiredFieldsCsv" [addMultiple]="addMultiple" [excludePropertiesCsv]="excludePropertiesCsv"></apex-add-dialog-wrapper>

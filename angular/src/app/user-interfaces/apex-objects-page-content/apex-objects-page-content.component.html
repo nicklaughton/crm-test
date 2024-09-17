@@ -1,0 +1,10 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!array || array.reading" aria-label="Loading"></mat-progress-bar>
+<ng-container *ngIf="array && !array.reading">
+	<apex-row verticalAlignment="center" [gap]="0">
+		<h1>{{businessObject.pluralDisplayName}}</h1>
+		<apex-export-tsv-button [array]="array"></apex-export-tsv-button>
+		<apex-import-tsv-button [array]="array"></apex-import-tsv-button>
+	</apex-row>
+	<apex-nav-list-v2 [array]="array" *ngIf="array"></apex-nav-list-v2>
+	<apex-add-button [array]="array" (added)="openItem($event)"></apex-add-button>
+</ng-container>

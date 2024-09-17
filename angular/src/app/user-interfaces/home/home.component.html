@@ -1,0 +1,37 @@
+<mat-progress-bar mode="indeterminate" *ngIf="projects.reading || companies.reading || contacts.reading || staff.reading"></mat-progress-bar>
+<div *ngIf="!projects.reading && !companies.reading && !contacts.reading && !staff.reading">
+	<h1>Welcome to CRM Sample</h1>
+	<p>
+		<span>Click the </span>
+		<mat-icon>lightbulb</mat-icon>
+		<span> icon in the toolbar for help.</span>
+		<span>  The full documentation is available </span>
+		<a href="https://docs.apexdesigner.io" target="_blank">here.</a>
+		<span>  A getting started tutorial is also available </span>
+		<a href="https://docs.apexdesigner.io/gettingStarted" target="_blank">here.</a>
+	</p>
+	<h2>Dashboard</h2>
+	<summary-cards [projects]="projects" [totalValue]="totalValue" [companies]="companies"></summary-cards>
+	<mat-tab-group>
+		<mat-tab label="Companies">
+			<div>
+				<apex-table-v3 [array]="companies" pathsCsv="name,description,industry.name,website,image" columnLabelsCsv="Name,Description,Industry,Website,Image"></apex-table-v3>
+			</div>
+		</mat-tab>
+		<mat-tab label="Projects">
+			<div>
+				<apex-table-v3 [array]="projects" pathsCsv="name,company.name,startDate,endDate,description,total,projectManager.name" columnLabelsCsv="Name,Company,Start Date,End Date,Description,Total,Project Manager" routePrefix="/home/projects/"></apex-table-v3>
+			</div>
+		</mat-tab>
+		<mat-tab label="Contacts">
+			<div>
+				<apex-table-v3 [array]="contacts"></apex-table-v3>
+			</div>
+		</mat-tab>
+		<mat-tab label="Staff">
+			<div>
+				<apex-table-v3 [array]="staff" pathsCsv="name,role,projects.length" columnLabelsCsv="Name,Role,Number of Projects"></apex-table-v3>
+			</div>
+		</mat-tab>
+	</mat-tab-group>
+</div>

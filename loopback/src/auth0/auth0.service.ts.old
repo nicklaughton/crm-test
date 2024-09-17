@@ -1,0 +1,50 @@
+import { inject, CoreBindings, Application } from '@loopback/core';
+import { config, Provider, bind, BindingScope, ContextTags } from '@loopback/context';
+import { AUTH0_SERVICE, Auth0Config, JWT_SERVICE, KEY } from './index';
+import { repository } from '@loopback/repository';
+const classDebug = require('debug')('Auth0Loopback4:Auth0Service');
+classDebug.log = console.log.bind(console);
+export type Auth0Provider = unknown;
+
+export interface Auth0Service {
+	emailToAppUser: object;
+	pendingRequestsByEmail: object;
+	addAppUserToRequest(req: any, email: string);
+	handlePendingRequests(email: string);
+}
+
+export class Auth0ServiceHelper implements Auth0Service {
+	constructor() {}
+
+	emailToAppUser: object = {};
+	pendingRequestsByEmail: object = {};
+
+	addAppUserToRequest(req: any, email: string) {
+		const debug = classDebug.extend('addAppUserToRequest');
+		debug('email', email);
+		const appUser = this.emailToAppUser[email];
+
+		req.appUser = appUser;
+		debug('req.appUser', req.appUser);
+	}
+
+	async handlePendingRequests(email: string) {
+		const debug = classDebug.extend('handlePendingRequests');
+		debug('email', email);
+		debug('pendingRequestsByEmail', this.pendingRequestsByEmail);
+		for (let pendingRequest of this.pendingRequestsByEmail[email] || []) {
+			this.addAppUserToRequest(pendingRequest.request, email);
+			pendingRequest.resolve((pendingRequest.request as any).appUser);
+		}
+		delete this.pendingRequestsByEmail[email];
+		delete this.emailToAppUser[email];
+	}
+}
+
+@bind({ tags: { [ContextTags.KEY]: AUTH0_SERVICE }, scope: BindingScope.SINGLETON })
+export class Auth0ServiceProvider implements Provider<Auth0Service> {
+	constructor() {}
+	value() {
+		return new Auth0ServiceHelper();
+	}
+}

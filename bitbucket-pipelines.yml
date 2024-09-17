@@ -1,0 +1,27 @@
+# Example pipeline to build and test an Angular and Loopback Application
+
+# Run in an image that includes headless chromium
+image: cypress/browsers:node18.12.0-chrome107
+
+pipelines:
+  default:
+    - step:
+      caches:
+        - node    
+      name: Test Angular
+      size: 2x
+      script:
+        - cd angular
+        - npm install
+        - npm run testHeadless
+    - step:
+        caches:
+          - node    
+        name: Test Loopback
+        size: 2x
+        script:
+          - cd loopback
+          - mkdir -p dist
+          - npm install
+          - npm run build
+          - npm test

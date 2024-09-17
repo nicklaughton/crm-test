@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{label || 'Import '+array.getMetadata('pluralDisplayName')}}</h2>
+<mat-dialog-content>
+	<p>Copy the data, including the header row, from your spreadsheet and paste it below.</p>
+	<button (click)="downloadTemplate()" mat-raised-button color="primary" class="download" data-apex-test="Download Template">Download Template</button>
+	<mat-form-field appearance="fill" floatLabel="always" data-apex-test="Paste from Excel">
+		<mat-label>Paste from Excel</mat-label>
+		<textarea matInput [cdkTextareaAutosize]="true" [(ngModel)]="tabSeparatedValues" [cdkAutosizeMinRows]="10"></textarea>
+	</mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button [mat-dialog-close]="true" mat-button data-apex-test="Cancel">Cancel</button>
+	<button mat-button (click)="importData()" data-apex-test="Import">Import</button>
+</mat-dialog-actions>

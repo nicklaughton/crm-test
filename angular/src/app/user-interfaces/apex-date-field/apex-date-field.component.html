@@ -1,0 +1,9 @@
+<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [floatLabel]="floatLabel || apexDynamicComponentsService.formFieldFloatLabel" [ngClass]="{'no-bottom-padding': noPadding}" class="apex-field" [attr.data-apex-test]="label || control.displayName">
+	<mat-label>{{label || control.displayName}}</mat-label>
+	<input matInput="matInput" [matDatepicker]="picker" [formControl]="momentControl" [required]="control?.validator && control?.validator({})?.required" [min]="minDate" [max]="maxDate" [autocomplete]="apexDynamicComponentsService.inputAutocomplete" (blur)="onBlur()">
+	<mat-datepicker-toggle matSuffix="matSuffix" [for]="picker" [disabled]="momentControl.disabled"></mat-datepicker-toggle>
+	<mat-datepicker #picker [startAt]="minDate" [dateClass]="dateClassFunction" [disabled]="momentControl.disabled"></mat-datepicker>
+	<mat-error *ngIf="momentControl.errors?.matDatepickerMax">Must be on or before {{maxDate.format('l')}}</mat-error>
+	<mat-error *ngIf="momentControl.errors?.matDatepickerMin">Must be on or after {{minDate.format('l')}}</mat-error>
+	<mat-error *ngIf="momentControl.errors?. matDatepickerParse">Please specify a valid date.</mat-error>
+</mat-form-field>

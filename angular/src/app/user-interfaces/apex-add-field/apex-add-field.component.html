@@ -1,0 +1,7 @@
+<div [ngClass]="{indent: array?.length > 0 && !skipIndent}">
+	<mat-form-field floatLabel="never" *ngIf="useComponent === false" [attr.data-apex-test]="label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')+'...'">
+		<mat-label>{{label || 'Add '+array?.getMetadata('infiniteArticle')+' '+array?.getMetadata('displayName')+'...'}}</mat-label>
+		<input matInput [(ngModel)]="newName" (keyup.enter)="add()" [autocomplete]="apexDynamicComponentsService.inputAutocomplete" (keyup.shift.enter)="add()">
+	</mat-form-field>
+	<ng-template #container></ng-template>
+</div>

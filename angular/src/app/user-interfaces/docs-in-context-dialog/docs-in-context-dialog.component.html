@@ -1,0 +1,46 @@
+<h2 mat-dialog-title fxLayout="row" cdkDrag cdkDragRootElement=".cdk-overlay-pane" fxLayoutAlign="start center">
+	<div fxFlex="">
+		<span *ngIf="!currentPage">{{label}}</span>
+		<mat-icon *ngIf="currentPage" class="clickable" (click)="currentPage = null" matTooltip="Back to List">keyboard_double_arrow_left</mat-icon>
+		<span *ngIf="currentPage">{{currentPage.title}}</span>
+	</div>
+	<a mat-icon-button matTooltip="Open in New Tab" href="{{docSiteUrl}}{{currentPage.path}}" *ngIf="currentPage" fxFlex="40px" target="_blank" (click)="markPathRead(currentPage.path)" data-apex-test="Open in New Tab">
+		<mat-icon>launch</mat-icon>
+	</a>
+	<mat-icon cdkDragHandle fxFlex="24px" class="move" matTooltip="Drag to Reposition">drag_indicator</mat-icon>
+	<button [mat-dialog-close]="true" (click)="dialog.close()" mat-icon-button matTooltip="Close" fxFlex="40px" data-apex-test="Close">
+		<mat-icon>clear</mat-icon>
+	</button>
+</h2>
+<mat-dialog-content>
+	<ng-container *ngIf="!readPaths['docsInContextWelcome']">
+		<p>{{welcome}}</p>
+		<button (click)="markPathRead('docsInContextWelcome')" color="accent" mat-raised-button data-apex-test="Got It">Got It</button>
+	</ng-container>
+	<ng-container *ngIf="readPaths['docsInContextWelcome']">
+		<p *ngIf="!currentPage && pages.length == 0">You have read everything for this context.</p>
+		<div *ngFor="let page of !currentPage ? pages : []; let i = index;" class="row" (mouseenter)="handleMouseEnter(page)" (mouseleave)="handleMouseLeave(page)" [ngClass]="{unread: !readPaths[page.path]}" fxLayout="row">
+			<div fxFlex="" matTooltip="Open Here" (click)="setCurrentPage(page)">
+				<h3 class="title">{{page.title}}</h3>
+				<p>{{page.description}}</p>
+			</div>
+			<button (click)="markPathRead(page.path)" *ngIf="!readPaths[page.path]" mat-icon-button matTooltip="Mark Read" data-apex-test="Mark Read">
+				<span class="material-icons-outlined">mark_email_read</span>
+			</button>
+			<button (click)="markPathUnread(page.path)" *ngIf="readPaths[page.path]" mat-icon-button matTooltip="Mark Unread" data-apex-test="Mark Unread">
+				<span class="material-icons-outlined">mark_email_unread</span>
+			</button>
+			<a mat-icon-button href="{{docSiteUrl}}{{page.path}}" fxFlex="40px" target="_blank" matTooltip="Open in New Tab" (click)="markPathRead(page.path)" data-apex-test="Open in New Tab">
+				<mat-icon>launch</mat-icon>
+			</a>
+		</div>
+		<h3 *ngIf="currentPage" class="description">{{currentPage.description}}</h3>
+		<mat-progress-bar mode="indeterminate" *ngIf="loading" aria-label="Loading"></mat-progress-bar>
+		<iframe [src]="safeUrl" *ngIf="currentPage" #iframe [ngClass]="{ invisible: loading }"></iframe>
+	</ng-container>
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between center" *ngIf="readPaths['docsInContextWelcome']">
+	<mat-checkbox [(ngModel)]="openAutomatically" fxFlex="nogrow" (ngModelChange)="openAutomaticallyChange.emit(openAutomatically)" data-apex-test="Open Automatically">Open Automatically</mat-checkbox>
+	<button mat-button (click)="markAllRead()" fxFlex="nogrow" color="accent" [disabled]="pages.length == 0 || this.showRead" data-apex-test="Mark All Read">Mark All Read</button>
+	<mat-checkbox [(ngModel)]="showRead" fxFlex="nogrow" (ngModelChange)="showReadChange.emit(showRead)" data-apex-test="Show Read Pages">Show Read Pages</mat-checkbox>
+</mat-dialog-actions>

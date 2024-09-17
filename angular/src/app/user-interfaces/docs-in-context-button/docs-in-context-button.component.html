@@ -1,0 +1,4 @@
+<button mat-icon-button [matTooltip]="label" (click)="dialogOpen = !dialogOpen" [attr.data-apex-test]="label">
+	<mat-icon [matBadge]="unreadCount || ''" matBadgeColor="warn">{{iconName}}</mat-icon>
+</button>
+<docs-in-context-dialog-wrapper [pages]="showPages" [label]="label" #dialog [docSiteUrl]="docSiteUrl" [options]="{autoFocus: false, disableClose: true, hasBackdrop: false,  position: position, width: '500px'}" (updateList)="applySelector()" [(isOpen)]="dialogOpen" [(openAutomatically)]="openAutomatically" [readPaths]="readPaths" [(showRead)]="showRead" [welcome]="welcome" (openAutomaticallyChange)="saveOpenAutomatically()"></docs-in-context-dialog-wrapper>

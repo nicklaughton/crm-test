@@ -1,0 +1,5 @@
+<mat-progress-bar mode="indeterminate" *ngIf="loading" [color]="color" aria-label="Loading"></mat-progress-bar>
+<ng-container *ngIf="!loading">
+	<ng-content></ng-content>
+	<apex-ng-content for-selector="apex-loading-container"></apex-ng-content>
+</ng-container>

@@ -1,0 +1,36 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+mat-form-field {
+    width: 100%;
+}
+
+::ng-deep .date-picker .mat-form-field-flex {
+    border-radius: 4px 0 0 0 !important;
+}
+
+::ng-deep .time-picker .mat-form-field-flex {
+    border-radius: 0 4px 0 0 !important;
+}
+
+.time-picker-panel {
+    width: 100px;
+}
+
+:host {
+    display: block;
+    position: relative;
+}
+
+mat-label.fake {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 10.5px;
+    line-height: 10.5px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    min-width: max-content;
+}
+
+.time-picker {
+    min-width: 75px;
+}

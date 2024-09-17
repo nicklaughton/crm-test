@@ -1,0 +1,623 @@
+.apexDragPreview {
+	background-color: white;
+	border: solid 1px lightgray;
+	border-radius: 4px;
+	position: absolute;
+}
+
+.apexHoverOverlay {
+	opacity: 0;
+	position: absolute;
+	border: 3px solid rgb(184, 226, 251);
+	width: calc(100% - 6px);
+	z-index: 5000;
+	transition: opacity 0.25s;
+	min-height: 40px;
+	font-size: 15px;
+	font-family: Roboto, 'Helvetica Neue', sans-serif;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none;
+}
+
+.apexFlipY {
+	-webkit-transform: scaleY(-1);
+	transform: scaleY(-1);
+}
+
+div.apexUnderlay {
+	position: fixed;
+	z-index: 4999;
+	background-color: rgba(52, 60, 108, 0.3);
+}
+
+.apexHoverOverlay:hover {
+	opacity: 1;
+}
+
+.apexHoverOverlay.current {
+	opacity: 1;
+	z-index: 5001;
+}
+
+/* adjustment for position:fixed to avoid being superceded by absolute overlays */
+.apexFixed {
+	z-index: 5000;
+}
+
+.apexNameOverlay {
+	background-color: #b8e2fb;
+	position: absolute;
+	color: white;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+	top: -3px;
+	left: -3px;
+	height: 34px;
+}
+
+.apexNameOverlay.align-right {
+	left: unset;
+	right: -3px;
+}
+
+.apexNameOverlay img {
+	filter: invert(1);
+	cursor: pointer;
+	margin-right: 8px;
+	height: 20px;
+}
+
+.apexNameOverlay span.name {
+	padding-left: 8px;
+	padding-right: 8px;
+	cursor: pointer;
+}
+
+.apexNameOverlay.hide {
+	display: none;
+}
+
+.apexNameOverlay span.buttons,
+.apexHoverOverlay:not(.current) .apexDeleteConfirmation {
+	display: none;
+}
+
+.apexHoverOverlay.current span.buttons {
+	display: flex;
+	align-items: center;
+}
+
+.apexDeleteConfirmation .confirm,
+.apexDeleteConfirmation .cancel {
+	cursor: pointer;
+	margin: 0px 10px;
+	color: dodgerblue;
+}
+
+.apexNameOverlay span.buttons img.disabled {
+	pointer-events: none;
+	opacity: 0.5;
+}
+
+.apexDragging .apexHoverOverlay .apexNameOverlay {
+	display: none;
+}
+
+.apexDragging .apexHoverOverlay:hover .apexNameOverlay {
+	display: flex;
+}
+
+.apexDragging .apexHoverOverlay {
+	opacity: 1;
+	border: none;
+}
+.apexDragging .apexHoverOverlay.before {
+	opacity: 1;
+	border-top: 3px solid rgb(184, 226, 251);
+}
+.apexDragging .apexHoverOverlay.after {
+	opacity: 1;
+	border-bottom: 3px solid rgb(184, 226, 251);
+}
+.apexDragging .apexHoverOverlay.inside {
+	opacity: 1;
+	border: 3px solid rgb(184, 226, 251);
+}
+
+img.apexDrag {
+	cursor: move;
+}
+
+.apexSkipLink {
+	position: absolute;
+	top: -40px;
+	left: 0;
+	background: #000000;
+	color: white;
+	padding: 8px;
+	z-index: 100;
+}
+
+.apexSkipLink:focus {
+	top: 0;
+}
+
+/* Utilities */
+.grow-horizontal {
+	flex: 1;
+	overflow: hidden;
+}
+.grow-horizontal-2x {
+	flex: 2;
+	overflow: hidden;
+}
+
+.grow-vertical {
+	flex: 1;
+	overflow: hidden;
+}
+
+.gap-20 {
+	gap: 20px;
+}
+
+.gap-40 {
+	gap: 40px;
+}
+
+.center-vertical {
+	align-items: center;
+}
+
+.scroll-vertical {
+	overflow-y: auto;
+}
+
+.vertical-flex-container {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.height-100-percent {
+	height: 100%;
+}
+
+.width-100-percent {
+	width: 100%;
+}
+
+.horizontal-flex-container {
+	display: flex;
+	overflow: hidden;
+}
+
+.wrap {
+	flex-flow: wrap;
+}
+
+.mat-typography .margin-bottom-20,
+.margin-bottom-20 {
+	margin-bottom: 20px;
+}
+.mat-typography .margin-0,
+.margin-0 {
+	margin: 0;
+}
+.mat-typography .margin-bottom-0,
+.margin-bottom-0 {
+	margin-bottom: 0;
+}
+
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+$primary: (
+	50: #e7e8ed,
+	100: #c2c5d3,
+	200: #9a9eb6,
+	300: #717798,
+	400: #525982,
+	500: #343c6c,
+	600: #2f3664,
+	700: #272e59,
+	800: #21274f,
+	900: #151a3d,
+	A100: #7b8aff,
+	A200: #485dff,
+	A400: #1530ff,
+	A700: #001dfb,
+	contrast: (
+		50: #000000,
+		100: #000000,
+		200: #000000,
+		300: #ffffff,
+		400: #ffffff,
+		500: #ffffff,
+		600: #ffffff,
+		700: #ffffff,
+		800: #ffffff,
+		900: #ffffff,
+		A100: #000000,
+		A200: #ffffff,
+		A400: #ffffff,
+		A700: #ffffff
+	)
+);
+
+$accent: (
+	50: #f1e0e0,
+	100: #dbb3b3,
+	200: #c48080,
+	300: #ac4d4d,
+	400: #9a2626,
+	500: #880000,
+	600: #800000,
+	700: #750000,
+	800: #6b0000,
+	900: #580000,
+	A100: #ff8a8a,
+	A200: #ff5757,
+	A400: #ff2424,
+	A700: #ff0a0a,
+	contrast: (
+		50: #000000,
+		100: #000000,
+		200: #000000,
+		300: #ffffff,
+		400: #ffffff,
+		500: #ffffff,
+		600: #ffffff,
+		700: #ffffff,
+		800: #ffffff,
+		900: #ffffff,
+		A100: #000000,
+		A200: #000000,
+		A400: #ffffff,
+		A700: #ffffff
+	)
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue.
+//$candy-app-primary: mat-palette($mat-indigo);
+$app-primary: mat-palette($primary);
+$app-accent: mat-palette($accent);
+
+// The warn palette is optional (defaults to red).
+$app-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($app-theme);
+
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined');
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+body {
+	margin: 0;
+}
+
+mat-form-field.no-bottom-padding .mat-form-field-wrapper {
+	padding-bottom: 0;
+}
+
+mat-form-field.no-bottom-padding .mat-form-field-underline {
+	position: static;
+}
+
+mat-form-field.no-bottom-padding mat-error,
+mat-form-field.no-bottom-padding mat-hint {
+	margin-top: 16px;
+}
+
+// Avoid large drag ripple
+a.mat-list-item.mat-focus-indicator.cdk-drag.cdk-drag-dragging,
+.mat-list-item.mat-focus-indicator.cdk-drag.cdk-drag-preview {
+	overflow: hidden;
+}
+
+/* Added 5/26/23 to remove extra spacing with card headers without avatars */
+.mat-card-header .mat-card-header-text:first-child {
+	margin-left: 0px;
+}
+.mat-card {
+	margin-bottom: 3px;
+}
+
+.auth0 .material-button {
+	text-decoration: none;
+	color: #fff;
+	background-color: #343c6c;
+	text-align: center;
+	letter-spacing: 0.5px;
+	border: none;
+	border-radius: 2px;
+	display: inline-block;
+	font-size: 14px;
+	outline: 0;
+	height: 36px;
+	line-height: 36px;
+	padding: 0 35px;
+	text-transform: uppercase;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	position: relative;
+	cursor: pointer;
+	overflow: hidden;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	vertical-align: middle;
+	z-index: 1;
+	-webkit-transition: 0.3s ease-out;
+	transition: 0.3s ease-out;
+}
+.auth0 .material-button:hover {
+	box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
+	background-color: #4a5389;
+}
+.auth0.container {
+	max-width: 400px;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.apex-field .mat-input-element:disabled,
+.apex-field .mat-select-disabled .mat-select-value {
+	color: black;
+}
+
+.mat-checkbox.no-bottom-padding {
+	margin-bottom: 0;
+}
+
+apex-select-field .mat-select-disabled .mat-select-arrow-wrapper {
+	visibility: hidden;
+}
+
+apex-date-time-field .mat-form-field-disabled .mat-form-field-suffix {
+	display: none;
+}
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-apexpurple: (
+	50: #eae7f6,
+	100: #cbc4e8,
+	200: #a89dd9,
+	300: #8576ca,
+	400: #6b58be,
+	500: #513bb3,
+	600: #4a35ac,
+	700: #402da3,
+	800: #37269a,
+	900: #27198b,
+	A100: #c8c2ff,
+	A200: #9b8fff,
+	A400: #6d5cff,
+	A700: #5742ff,
+	contrast: (
+		50: #000000,
+		100: #000000,
+		200: #000000,
+		300: #000000,
+		400: #ffffff,
+		500: #ffffff,
+		600: #ffffff,
+		700: #ffffff,
+		800: #ffffff,
+		900: #ffffff,
+		A100: #000000,
+		A200: #000000,
+		A400: #ffffff,
+		A700: #ffffff
+	)
+);
+
+$md-apexpink: (
+	50: #f9e4f9,
+	100: #f1bbf1,
+	200: #e88ee8,
+	300: #df61df,
+	400: #d83fd8,
+	500: #d11dd1,
+	600: #cc1acc,
+	700: #c615c6,
+	800: #c011c0,
+	900: #b50ab5,
+	A100: #ffe0ff,
+	A200: #ffadff,
+	A400: #ff7aff,
+	A700: #ff61ff,
+	contrast: (
+		50: #000000,
+		100: #000000,
+		200: #000000,
+		300: #000000,
+		400: #ffffff,
+		500: #ffffff,
+		600: #ffffff,
+		700: #ffffff,
+		800: #ffffff,
+		900: #ffffff,
+		A100: #000000,
+		A200: #000000,
+		A400: #000000,
+		A700: #000000
+	)
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-apexgreen: (
+	50: #e3f7ee,
+	100: #b8ebd6,
+	200: #89deba,
+	300: #5ad09e,
+	400: #36c68a,
+	500: #13bc75,
+	600: #11b66d,
+	700: #0ead62,
+	800: #0ba558,
+	900: #069745,
+	A100: #c3ffda,
+	A200: #90ffba,
+	A400: #5dff9a,
+	A700: #43ff8a,
+	contrast: (
+		50: #000000,
+		100: #000000,
+		200: #000000,
+		300: #000000,
+		400: #000000,
+		500: #000000,
+		600: #ffffff,
+		700: #ffffff,
+		800: #ffffff,
+		900: #ffffff,
+		A100: #000000,
+		A200: #000000,
+		A400: #000000,
+		A700: #000000
+	)
+);
+
+$app-primary: mat-palette($md-apexpurple);
+$app-accent: mat-palette($md-apexpink);
+
+$app-warn: mat-palette($mat-red);
+
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+$alt-theme: mat-light-theme($app-accent, $app-primary, $app-warn);
+
+@include angular-material-theme($app-theme);
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=AR+One+Sans:wght@300;400;500;600;700;800&display=swap');
+
+$custom-typography: mat-typography-config(
+	$font-family: '"AR One Sans", verdana;'
+);
+@include mat-core($custom-typography);
+
+//@include mat-form-field-theme($alt-theme);
+
+// $fontConfig: (
+// 	display-4: mat-typography-level(112px, 112px, 300, 'Merriweather', -0.0134em),
+// 	display-3: mat-typography-level(56px, 56px, 400, 'Merriweather', -0.0089em),
+// 	display-2: mat-typography-level(45px, 48px, 400, 'Merriweather', 0em),
+// 	display-1: mat-typography-level(34px, 40px, 400, 'Merriweather', 0.0074em)
+// );
+
+// @include mat-core($fontConfig);
+
+// h1 {
+// 	font-family: Merriweather !important;
+// }
+
+.apex-designer-page {
+	height: calc(100vh - 87px);
+	//background-color: #ffffff;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	max-width: 1600px;
+	margin: 0 auto;
+}
+
+.mat-form-field-outline {
+	background-color: white;
+	border-radius: 5px;
+}
+
+.gap-5 {
+	gap: 5px;
+}
+
+.gap-10 {
+	gap: 10px;
+}
+
+.margin-right-20 {
+	margin-right: 20px;
+}
+
+.max-width-150 {
+	max-width: 150px;
+}
+
+th {
+	//background-color: #eee !important;
+	color: rgba(0, 0, 0, 0.87) !important;
+	font-weight: bold !important;
+}
+th.mat-header-cell {
+	border-bottom-color: rgba(0, 0, 0, 0.3);
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+.display-block {
+	display: block;
+}
+
+td.mat-cell {
+	padding-left: 16px;
+	border-bottom-color: rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+	padding-left: 8px;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+	color: rgba(0, 0, 0, 0.3);
+}
+
+.light-background {
+	background-color: #eae7f6;
+}
+
+.medium-background {
+	background-color: #cbc4e8;
+}
+.padding-8 {
+	padding: 8px;
+}
+.border-radius-4 {
+	border-radius: 4px;
+}
+
+//Put some padding on the main container
+// mat-sidenav-content {
+// 	padding: 20px 10vw !important;
+// }
+
+//Styling for Tab titles
+// .mat-tab-label,
+// .mat-tab-link {
+// 	font-family: 'Rubik';
+// 	font-size: 16px;
+// 	font-weight: 700;
+// }

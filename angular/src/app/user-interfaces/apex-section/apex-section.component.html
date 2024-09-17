@@ -1,0 +1,6 @@
+<h1 *ngIf="headingLevel==1">{{label}}</h1>
+<h2 *ngIf="headingLevel==2">{{label}}</h2>
+<h3 *ngIf="headingLevel==3">{{label}}</h3>
+<h4 *ngIf="headingLevel==4">{{label}}</h4>
+<ng-content></ng-content>
+<apex-ng-content for-selector="apex-section"></apex-ng-content>

@@ -1,0 +1,16 @@
+<h1 *ngIf="label && headingLevel == 1">{{label}}</h1>
+<h2 *ngIf="label && headingLevel == 2">{{label}}</h2>
+<h3 *ngIf="label && headingLevel == 3">{{label}}</h3>
+<div #wrapper>
+	<table [dataSource]="array" #table mat-table>
+		<ng-container [matColumnDef]="columnProperty" *ngFor="let columnProperty of columnProperties; let i = index;">
+			<th mat-header-cell *matHeaderCellDef>{{columnLabels[i]}}</th>
+			<td mat-cell *matCellDef="let item" [ngStyle]="{width: columnWidth}">
+				<span *ngIf="noLinks">{{cellValue(item, columnProperty, columnTypes[i])}}</span>
+				<a routerLink="{{routePrefix}}{{relationshipName ? item[relationshipName].id : item.id}}" *ngIf="!noLinks">{{cellValue(item, columnProperty, columnTypes[i])}}</a>
+			</td>
+		</ng-container>
+		<tr *matHeaderRowDef="columnProperties" mat-header-row></tr>
+		<tr *matRowDef="let row; columns: columnProperties;" mat-row></tr>
+	</table>
+</div>

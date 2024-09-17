@@ -1,0 +1,21 @@
+<apex-row gap="0" verticalAlignment="center">
+	<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [floatLabel]="apexDynamicComponentsService.formFieldFloatLabel" [ngClass]="{'no-bottom-padding': noPadding}" (click)="openPicker($event)" [style.cursor]="control?.value ? 'auto' : 'pointer'" class="date-picker apex-field" fxFlex="100px" data-apex-test="Date">
+		<input matInput="matInput" [matDatepicker]="picker" [formControl]="momentControl" [required]="required || (control?.validator && control?.validator({})?.required)" [min]="minDate" [max]="maxDate" [style.cursor]="control?.value ? 'auto' : 'pointer'" [autocomplete]="apexDynamicComponentsService.inputAutocomplete">
+		<mat-datepicker #picker></mat-datepicker>
+		<mat-error *ngIf="momentControl.errors?.matDatepickerMax">Must be on or before {{max.format('l')}}</mat-error>
+		<mat-error *ngIf="momentControl.errors?.matDatepickerMin">Must be on or after {{min.format('l')}}</mat-error>
+		<mat-error *ngIf="momentControl.errors?.matDatepickerParse">Please specify a valid date.</mat-error>
+	</mat-form-field>
+	<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [ngClass]="{'no-bottom-padding': noPadding}" floatLabel="always" class="time-picker apex-field" fxFlex (click)="onTimePickerClick()" data-apex-test="Time">
+		<input matInput [matAutocomplete]="auto" [formControl]="timeControl" [matAutocompleteDisabled]="!timeControl.value" [autocomplete]="apexDynamicComponentsService.inputAutocomplete">
+		<mat-autocomplete #auto="matAutocomplete" (opened)="filterTimeOptions()" #panel classList="time-pic">
+			<mat-option *ngFor="let option of timeOptions; let i = index;" [value]="option" #autoOption>{{option}}</mat-option>
+		</mat-autocomplete>
+		<button mat-icon-button matSuffix>
+			<mat-icon>event</mat-icon>
+		</button>
+	</mat-form-field>
+	<mat-label class="fake" fxFlex>{{label || control.displayName}}
+		<span *ngIf="required || (control?.validator && control?.validator({})?.required)"> *</span>
+	</mat-label>
+</apex-row>

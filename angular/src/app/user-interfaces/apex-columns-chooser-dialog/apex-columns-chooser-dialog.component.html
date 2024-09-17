@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Choose Columns</h2>
+<mat-dialog-content #content [ngStyle]="{width: width}">
+	<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" class="width-100-percent">
+		<mat-icon matPrefix>search</mat-icon>
+		<input matInput [(ngModel)]="searchString">
+		<button (click)="searchString = ''" matSuffix mat-icon-button [disabled]="!searchString">
+			<mat-icon>clear</mat-icon>
+		</button>
+	</mat-form-field>
+	<div *ngIf="!searchString">
+		<a (click)="setAll(true)" data-apex-test="Select All">Select All</a>
+		<a (click)="setAll(false)" data-apex-test="Clear Selections">Clear Selections</a>
+	</div>
+	<mat-list cdkDropList (cdkDropListDropped)="drop($event)">
+		<ng-container *ngFor="let propertySelection of propertySelections; let i = index;">
+			<mat-list-item cdkDrag cdkDragLockAxis="y" *ngIf="show(propertySelection.displayName)">
+				<div class="horizontal-flex-container width-100-percent gap-20">
+					<mat-checkbox [(ngModel)]="propertySelection.selected" [attr.data-apex-test]="propertySelection.displayName" class="grow-horizontal">{{propertySelection.displayName}}</mat-checkbox>
+					<mat-icon cdkDragHandle class="dragHandle">drag_indicator</mat-icon>
+				</div>
+			</mat-list-item>
+		</ng-container>
+	</mat-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button [mat-dialog-close]="true" mat-button data-apex-test="Close">Close</button>
+</mat-dialog-actions>

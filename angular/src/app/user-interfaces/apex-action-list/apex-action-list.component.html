@@ -1,0 +1,5 @@
+<mat-action-list>
+	<button *ngFor="let item of array; let i = index;" mat-list-item (click)="clicked.emit(item)" [matTooltip]="label" [attr.data-apex-test]="label">
+		<apex-display-name [object]="item"></apex-display-name>
+	</button>
+</mat-action-list>

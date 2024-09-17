@@ -1,0 +1,34 @@
+<apex-row style="margin-bottom:30px;">
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>Total Number of Companies</mat-card-title>
+			<mat-card-subtitle></mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<div class="headline mat-display-2">{{companies.length}}</div>
+		</mat-card-content>
+		<mat-card-actions align="end">
+			<a mat-raised-button routerLink="/companies" color="accent">See All</a>
+		</mat-card-actions>
+	</mat-card>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>Total Number of Projects</mat-card-title>
+			<mat-card-subtitle></mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<div class="headline mat-display-2">{{projects.length}}</div>
+		</mat-card-content>
+		<mat-card-actions align=""></mat-card-actions>
+	</mat-card>
+	<mat-card>
+		<mat-card-header>
+			<mat-card-title>Total Value of Projects</mat-card-title>
+			<mat-card-subtitle></mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<div class="headline mat-display-2">{{totalValue}}</div>
+		</mat-card-content>
+		<mat-card-actions align=""></mat-card-actions>
+	</mat-card>
+</apex-row>

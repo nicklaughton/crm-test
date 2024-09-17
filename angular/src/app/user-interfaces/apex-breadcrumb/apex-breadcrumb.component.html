@@ -1,0 +1,17 @@
+<apex-row [gap]="gap" verticalAlignment="center">
+	<h1>
+		<ng-container *ngFor="let level of levels; let i = index;">
+			<mat-icon *ngIf="i>0">keyboard_arrow_right</mat-icon>
+			<span *ngIf="!level.routerLink">
+				<span *ngIf="!level.object" [matTooltip]="level.tooltip">{{level.displayName}}</span>
+				<apex-display-name [object]="level.object" *ngIf="level.object" [matTooltip]="level.tooltip"></apex-display-name>
+			</span>
+			<a *ngIf="level.routerLink" [routerLink]="level.routerLink" [matTooltip]="level.tooltip" [attr.data-apex-test]="level.displayName">
+				<span *ngIf="!level.object">{{level.displayName}}</span>
+				<apex-display-name [object]="level.object" *ngIf="level.object"></apex-display-name>
+			</a>
+		</ng-container>
+	</h1>
+	<ng-content></ng-content>
+	<apex-ng-content for-selector="apex-breadcrumb"></apex-ng-content>
+</apex-row>

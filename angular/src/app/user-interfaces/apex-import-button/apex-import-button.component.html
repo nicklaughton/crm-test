@@ -1,0 +1,6 @@
+<button mat-icon-button (click)="fileSelector.click()" [disabled]="disabled" [attr.data-apex-test]="disabled ? 'Add the Export/Import Mixin to ' + array?.getMetadata('displayName') : 'Import ' + array?.getMetadata('displayName')">
+	<mat-icon matTooltip="Import {{array?.getMetadata('displayName')}}" *ngIf="!disabled">cloud_upload</mat-icon>
+	<mat-icon matTooltip="Add the Export/Import Mixin to {{array?.getMetadata('displayName')}}" *ngIf="disabled">cloud_upload</mat-icon>
+</button>
+<input type="file" #fileSelector class="hidden" (change)="handleSelection()">
+<apex-message-dialog-wrapper [message]="message" #dialog></apex-message-dialog-wrapper>

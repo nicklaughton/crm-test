@@ -1,0 +1,5 @@
+<h1 *ngIf="label && headingLevel == 1">{{label}}</h1>
+<h2 *ngIf="label && headingLevel == 2">{{label}}</h2>
+<h3 *ngIf="label && headingLevel == 3">{{label}}</h3>
+<ng-content></ng-content>
+<apex-ng-content for-selector="apex-column"></apex-ng-content>

@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Access Restricted</h2>
+<mat-dialog-content>
+	<div *ngIf="!isNotTeamMemberCheck">This page can only be accessed by team members of the following: {{teamNames.join(', ')}}.</div>
+	<p *ngIf="isNotTeamMemberCheck">This page cannot be accessed by team members of the following: {{teamNames.join(', ')}}.</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button [mat-dialog-close]="true" mat-button>Close</button>
+</mat-dialog-actions>

@@ -1,0 +1,49 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+:host {
+    display: block;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+    padding-left: 24px;
+}
+
+th.mat-header-cell:last-of-type,
+td.mat-cell:last-of-type,
+td.mat-footer-cell:last-of-type {
+    padding-left: 24px;
+}
+
+::ng-deep .checkbox-as-radio .mat-checkbox-frame,
+::ng-deep .checkbox-as-radio .mat-checkbox-background {
+    border-radius: 50%;
+}

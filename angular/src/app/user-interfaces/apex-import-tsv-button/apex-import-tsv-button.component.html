@@ -1,0 +1,4 @@
+<button mat-icon-button (click)="dialog.open()" [matTooltip]="label || 'Import '+array.getMetadata('pluralDisplayName')" [attr.data-apex-test]="label || 'Import '+array.getMetadata('pluralDisplayName')">
+	<mat-icon>upload</mat-icon>
+</button>
+<apex-import-tsv-dialog-wrapper [array]="array" #dialog [tsvHandler]="tsvHandler" (changes)="changes.emit()" [parentObject]="parentObject" [customTemplate]="customTemplate"></apex-import-tsv-dialog-wrapper>

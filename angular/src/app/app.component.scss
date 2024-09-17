@@ -1,0 +1,19 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+mat-sidenav-container {
+    width: 100%;
+}
+
+mat-toolbar {
+    line-height: 40px;
+}
+
+mat-sidenav-content {
+    height: calc(100vh - 84px);
+    padding: 20px;
+    padding-bottom: 0;
+}
+
+apex-row {
+    width: 100%;
+}

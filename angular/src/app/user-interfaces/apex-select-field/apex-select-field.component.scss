@@ -1,0 +1,12 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+:host {
+    display: block;
+}
+mat-form-field {
+    width: 100%;
+}
+::ng-deep .mat-form-field-suffix {
+    display: inline-flex;
+    align-items: center;
+}

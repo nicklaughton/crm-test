@@ -1,0 +1,4 @@
+<button (click)="dialog.open()" mat-icon-button [matTooltip]="label || 'Edit '+object?.getMetadata('displayName')" [attr.data-apex-test]="label || 'Edit '+object?.getMetadata('displayName')">
+	<mat-icon>{{iconName}}</mat-icon>
+</button>
+<apex-edit-dialog-wrapper [object]="object" #dialog [includeRelationshipsCsv]="includeRelationshipsCsv" [label]="label"></apex-edit-dialog-wrapper>

@@ -1,0 +1,9 @@
+// Copyright 2023 Apex Process Consultants. This code is covered by the terms in the Apex Designer Library License file included with this project.
+
+apex-fields {
+    width: 400px;
+}
+
+mat-dialog-content {
+    margin-bottom: -20px; // Remove the extra space caused by the last field
+}

@@ -1,0 +1,28 @@
+<mat-progress-bar mode="indeterminate" *ngIf="!object || object.reading" aria-label="Loading"></mat-progress-bar>
+<ng-container *ngIf="object && !object.reading">
+	<apex-path-breadcrumb [object]="object">
+		<apex-delete-button [object]="object" [afterDeleteRoute]="afterDeleteRoute"></apex-delete-button>
+	</apex-path-breadcrumb>
+	<apex-fields-deprecated [object]="object"></apex-fields-deprecated>
+	<ng-container *ngFor="let childRelationship of childRelationships; let i = index;">
+		<ng-container *ngIf="childRelationship.type == 'has many'">
+			<h2>{{childRelationship.relatedBusinessObject.pluralDisplayName}}
+				<button (click)="startAdd(childRelationship)" mat-icon-button matTooltip="Add {{childRelationship.relatedBusinessObject.infiniteArticle}} {{childRelationship.relatedBusinessObject.displayName}}" [attr.data-apex-test]="'Add ' + childRelationship.relatedBusinessObject.infiniteArticle + ' ' + childRelationship.relatedBusinessObject.displayName">
+					<mat-icon>add</mat-icon>
+				</button>
+				<apex-export-tsv-button [array]="object[childRelationship.name]"></apex-export-tsv-button>
+				<apex-import-tsv-button [array]="object[childRelationship.name]" [parentObject]="object"></apex-import-tsv-button>
+			</h2>
+			<apex-nav-list-v2 [array]="object[childRelationship.name]"></apex-nav-list-v2>
+		</ng-container>
+		<ng-container *ngIf="childRelationship.type == 'has one'">
+			<h2>{{childRelationship.relatedBusinessObject.displayName}}
+				<button (click)="openItem(object[childRelationship.name])" mat-icon-button data-apex-test="Open Item">
+					<mat-icon>launch</mat-icon>
+				</button>
+			</h2>
+			<apex-fields [object]="object[childRelationship.name]" [disabled]="true"></apex-fields>
+		</ng-container>
+	</ng-container>
+	<apex-add-dialog-wrapper [array]="selectedList" [defaults]="selectedDefaults" (added)="openItem($event)" #addDialog></apex-add-dialog-wrapper>
+</ng-container>

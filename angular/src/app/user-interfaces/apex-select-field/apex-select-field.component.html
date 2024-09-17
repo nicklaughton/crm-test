@@ -1,0 +1,13 @@
+<mat-form-field [appearance]="apexDynamicComponentsService.formFieldAppearance" [floatLabel]="floatLabel || apexDynamicComponentsService.formFieldFloatLabel" [ngClass]="{'no-bottom-padding':noPadding}" *ngIf="control" class="apex-field" [attr.data-apex-test]="label || control.displayName">
+	<mat-label>{{label || control.displayName}}</mat-label>
+	<mat-select [formControl]="control" [required]="control?.validator && control?.validator({})?.required" [placeholder]="placeholder">
+		<mat-option *ngFor="let option of options; let i = index;" [value]="valueFunction(option)">
+			<span *ngIf="displayNameFunction">{{displayNameFunction(option)}}</span>
+			<apex-display-name [object]="option" *ngIf="!displayNameFunction"></apex-display-name>
+		</mat-option>
+	</mat-select>
+	<button (click)="$event.stopPropagation(); control.reset();" mat-icon-button matSuffix type="button" *ngIf="clearable && control?.value" data-apex-test="Close">
+		<mat-icon>close</mat-icon>
+	</button>
+	<mat-error *ngIf="control.errors">{{errorMessage()}}</mat-error>
+</mat-form-field>

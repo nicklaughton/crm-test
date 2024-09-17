@@ -1,0 +1,10 @@
+<img src="/api/Images/{{image.id}}/download?hash={{image.hash}}" *ngIf="image?.id">
+<img src="/assets/blank-profile-picture.png" *ngIf="!image?.id">
+<mat-spinner diameter="100" *ngIf="uploading"></mat-spinner>
+<button (click)="fileUploadInput.click()" mat-icon-button matTooltip="Upload Image" class="upload">
+	<mat-icon>upload</mat-icon>
+</button>
+<button (click)="remove()" mat-icon-button matTooltip="Remove Image" class="delete" *ngIf="image?.id">
+	<mat-icon>clear</mat-icon>
+</button>
+<input accept="image/*" (change)="upload()" type="file" #fileUploadInput class="hidden">

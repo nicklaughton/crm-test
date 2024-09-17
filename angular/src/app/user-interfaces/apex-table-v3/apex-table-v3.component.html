@@ -1,0 +1,20 @@
+<h1 *ngIf="label && headingLevel == 1">{{label}}</h1>
+<h2 *ngIf="label && headingLevel == 2">{{label}}</h2>
+<h3 *ngIf="label && headingLevel == 3">{{label}}</h3>
+<div #wrapper>
+	<table [dataSource]="array" #table mat-table>
+		<ng-container [matColumnDef]="columnPath" *ngFor="let columnPath of columnPaths; let i = index;">
+			<th mat-header-cell *matHeaderCellDef>
+				<span *ngIf="columnPath != 'select'">{{columnLabels[i]}}</span>
+				<mat-checkbox (change)="$event ? masterToggle() : null; handleRowSelection()" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()" *ngIf="columnPath == 'select' && multiSelect" data-apex-test="Select"></mat-checkbox>
+			</th>
+			<td mat-cell *matCellDef="let item" [matTooltip]="clickTooltip" [ngClass]="{clickable: clickTooltip}">
+				<a [routerLink]="itemUrl(item)" *ngIf="!noLinks && columnPath != 'select'" [queryParams]="itemQueryParams(item)" [attr.data-apex-test]="cellValue(item, columnPath, columnTypes[i])">{{cellValue(item, columnPath, columnTypes[i])}}</a>
+				<span *ngIf="noLinks && columnPath != 'select'" (click)="rowClicked.emit(item)" [ngClass]="{ clickable: rowClicked.observers.length > 0 }">{{cellValue(item, columnPath, columnTypes[i])}}</span>
+				<mat-checkbox (click)="$event.stopPropagation()" (change)="singleSelect ? selection.clear() : null; $event ? selection.toggle(item) : null; handleRowSelection()" [checked]="selection.isSelected(item)" *ngIf="columnPath == 'select'" data-apex-test="Select" [ngClass]="{'checkbox-as-radio': singleSelect}"></mat-checkbox>
+			</td>
+		</ng-container>
+		<tr *matHeaderRowDef="columnPaths; sticky: true;" mat-header-row></tr>
+		<tr *matRowDef="let row; columns: columnPaths;" mat-row></tr>
+	</table>
+</div>
