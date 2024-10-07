@@ -1,7 +1,7 @@
 {
-    "domain": "apexdesigner.auth0.com",
-    "audience": "https://sample.apexdesigner.app",
-    "clientId": "hTEcUuIAyhriavioOXcd6xjVnE2vGJS9",
+    "domain": "dev-zk43k06qd1xjvfrm.us.auth0.com",
+    "audience": "https://app-nick-crm-2024-2.apexdesigner.app",
+    "clientId": "XWerhcvU3XPq6s4n84igkRM2bQScyrPU",
     "logInRoute": "/logIn",
     "loginErrorRoute": "/loginError",
     "verifyEmailRoute": "/verifyEmail",
